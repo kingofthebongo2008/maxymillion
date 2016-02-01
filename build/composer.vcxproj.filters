@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="header files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="header files\include">
+      <UniqueIdentifier>{9d519fcb-41fa-4d41-bb5e-f873383c219b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header files\include\os">
+      <UniqueIdentifier>{f20a7348-ce10-45cf-aa19-fb9974e6ff9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header files\include\imaging">
+      <UniqueIdentifier>{5ce0b796-d37e-4a7b-9292-8853bda0aacc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header files\include\util">
+      <UniqueIdentifier>{67ff1e74-5137-488e-88c6-5af6d09893b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header files\include\os\windows">
+      <UniqueIdentifier>{5ab995a6-b53c-4da1-a2a3-ba7b9ed0d0c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header files\include\d3d11">
+      <UniqueIdentifier>{bede841b-5444-4ae3-a583-ca4a1aef6352}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="readMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\imaging\imaging.h">
+      <Filter>header files\include\imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\imaging\imaging_utils.h">
+      <Filter>header files\include\imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\imaging\imaging_utils_base.h">
+      <Filter>header files\include\imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\imaging\imaging_utils_cpu.h">
+      <Filter>header files\include\imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\util\util_noncopyable.h">
+      <Filter>header files\include\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\util\util_utf8_conv.h">
+      <Filter>header files\include\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\os\windows\com_error.h">
+      <Filter>header files\include\os\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\os\windows\com_initializer.h">
+      <Filter>header files\include\os\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\os\windows\com_pointers.h">
+      <Filter>header files\include\os\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\os\windows\com_ptr.h">
+      <Filter>header files\include\os\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\os\windows\dxgi_pointers.h">
+      <Filter>header files\include\os\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\os\windows\wnd_application.h">
+      <Filter>header files\include\os\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\d3d11\d3d11_error.h">
+      <Filter>header files\include\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\d3d11\d3d11_exception.h">
+      <Filter>header files\include\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\d3d11\d3d11_helpers.h">
+      <Filter>header files\include\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\d3d11\d3d11_pointers.h">
+      <Filter>header files\include\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\d3d11\d3d11_system.h">
+      <Filter>header files\include\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\d3d11\dxgi_helpers.h">
+      <Filter>header files\include\d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\precompiled.h">
+      <Filter>source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\targetver.h">
+      <Filter>source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\composer\main.cpp">
+      <Filter>source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\composer\precompiled.cpp">
+      <Filter>source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

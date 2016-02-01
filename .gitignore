@@ -1,0 +1,11 @@
+*.obj
+*.ilk
+*.tlog
+*.suo
+*.sdf
+*.opendb
+*.log
+*.jpg
+*.pdb
+bin/
+tmp/
