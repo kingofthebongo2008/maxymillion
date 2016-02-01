@@ -27,6 +27,12 @@
     <Filter Include="header files\include\d3d11">
       <UniqueIdentifier>{bede841b-5444-4ae3-a583-ca4a1aef6352}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source Files\src">
+      <UniqueIdentifier>{69c773b1-bebb-42e9-b05e-9347767852a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source Files\shaders">
+      <UniqueIdentifier>{f7a6c6aa-8426-4efe-9c6d-e1199b0c9dd2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="readMe.txt" />
@@ -87,18 +93,26 @@
       <Filter>header files\include\d3d11</Filter>
     </ClInclude>
     <ClInclude Include="..\src\composer\precompiled.h">
-      <Filter>source Files</Filter>
+      <Filter>source Files\src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\composer\targetver.h">
-      <Filter>source Files</Filter>
+      <Filter>source Files\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\composer\main.cpp">
-      <Filter>source Files</Filter>
+      <Filter>source Files\src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\composer\precompiled.cpp">
-      <Filter>source Files</Filter>
+      <Filter>source Files\src</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\src\composer\shaders\shader_crop_vs.hlsl">
+      <Filter>source Files\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\composer\shaders\shader_crop_ps.hlsl">
+      <Filter>source Files\shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
