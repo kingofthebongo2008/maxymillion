@@ -228,6 +228,7 @@
     <ClInclude Include="..\include\util\util_noncopyable.h" />
     <ClInclude Include="..\include\util\util_utf8_conv.h" />
     <ClInclude Include="..\src\composer\precompiled.h" />
+    <ClInclude Include="..\src\composer\shader_crop_ps.h" />
     <ClInclude Include="..\src\composer\shader_crop_vs.h" />
     <ClInclude Include="..\src\composer\targetver.h" />
   </ItemGroup>

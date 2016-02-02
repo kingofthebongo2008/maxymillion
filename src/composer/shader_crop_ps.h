@@ -9,38 +9,38 @@
 
 namespace composer
 {
-    typedef std::tuple< d3d11::ivertexshader_ptr, const void*, uint32_t> vertex_shader_create_info;
+    typedef std::tuple< d3d11::ipixelshader_ptr, const void*, uint32_t> pixel_shader_create_info;
 
     namespace details
     {
-        inline vertex_shader_create_info   create_shader_crop_vs(ID3D11Device* device)
+        inline pixel_shader_create_info   create_shader_crop_ps(ID3D11Device* device)
         {
             using namespace d3d11;
-            d3d11::ivertexshader_ptr   shader;
+            d3d11::ipixelshader_ptr   shader;
 
             using namespace os::windows;
 
             //strange? see in the hlsl file
             static
-            #include "shader_crop_vs_compiled.hlsl"
+            #include "shader_crop_ps_compiled.hlsl"
 
                 //load, compile and create a pixel shader with the code in the hlsl file, might get slow (this is a compilation), consider offloading to another thread
-            throw_if_failed<create_vertex_shader>(device->CreateVertexShader(shader_crop_vs_compiled, sizeof(shader_crop_vs_compiled), nullptr, &shader));
+            throw_if_failed<create_pixel_shader>(device->CreatePixelShader(shader_crop_ps_compiled, sizeof(shader_crop_ps_compiled), nullptr, &shader));
 
-            return std::make_tuple(shader, &shader_crop_vs_compiled[0], static_cast<uint32_t> (sizeof(shader_crop_vs_compiled)));
+            return std::make_tuple(shader, &shader_crop_ps_compiled[0], static_cast<uint32_t> (sizeof(shader_crop_ps_compiled)));
         }
     }
 
-    class shader_crop_vs final
+    class shader_crop_ps final
     {
 
     public:
-        shader_crop_vs()
+        shader_crop_ps()
         {
 
         }
 
-        explicit shader_crop_vs(vertex_shader_create_info info) :
+        explicit shader_crop_ps(pixel_shader_create_info info) :
             m_shader(std::get<0>(info))
             , m_code(std::get<1>(info))
             , m_code_size(std::get<2>(info))
@@ -49,7 +49,7 @@ namespace composer
 
 
 
-        shader_crop_vs(shader_crop_vs&&  o) :
+        shader_crop_ps(shader_crop_ps&&  o) :
             m_shader(std::move(o.m_shader))
             , m_code(std::move(o.m_code))
             , m_code_size(std::move(o.m_code_size))
@@ -57,12 +57,12 @@ namespace composer
 
         }
 
-        operator ID3D11VertexShader* () const
+        operator ID3D11PixelShader* () const
         {
             return m_shader.get();
         }
 
-        shader_crop_vs& operator=(shader_crop_vs&& o)
+        shader_crop_ps& operator=(shader_crop_ps&& o)
         {
             m_shader = std::move(o.m_shader);
             m_code = std::move(o.m_code);
@@ -70,15 +70,15 @@ namespace composer
             return *this;
         }
 
-        d3d11::ivertexshader_ptr     m_shader;
+        d3d11::ipixelshader_ptr      m_shader;
         const void*                  m_code;
         uint32_t                     m_code_size;
     };
 
 
-    inline shader_crop_vs   create_shader_crop_vs(ID3D11Device* device)
+    inline shader_crop_ps   create_shader_crop_ps(ID3D11Device* device)
     {
-        return shader_crop_vs(details::create_shader_crop_vs(device));
+        return shader_crop_ps(details::create_shader_crop_ps(device));
     }
 
 }

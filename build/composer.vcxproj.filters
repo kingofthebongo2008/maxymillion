@@ -98,8 +98,11 @@
     <ClInclude Include="..\src\composer\targetver.h">
       <Filter>source Files\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\composer\shader_crop_ps.h">
+      <Filter>source Files\src</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\composer\shader_crop_vs.h">
-      <Filter>source Files</Filter>
+      <Filter>source Files\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

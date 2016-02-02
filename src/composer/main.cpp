@@ -13,6 +13,7 @@
 #include <d3d11/d3d11_helpers.h>
 
 #include "shader_crop_vs.h"
+#include "shader_crop_ps.h"
 
 namespace composer
 {
@@ -28,6 +29,9 @@ namespace composer
         d3d11::irasterizerstate_ptr         m_rasterizer_state;
         d3d11::isamplerstate_ptr            m_sampler;
         D3D11_VIEWPORT                      m_view_port;
+
+        shader_crop_vs                      m_vs_crop;
+        shader_crop_ps                      m_ps_crop;
     };
 
     DXGI_FORMAT translate_format(imaging::image_type t)
@@ -108,7 +112,7 @@ namespace composer
 
         r.m_staging_texture         = composer::create_staging_texture(d, width, height);
         r.m_render_target_texture   = composer::create_render_target_texture(d, width, height);
-        r.m_render_target           = d3d11::create_render_target_view(d, r.m_render_target_texture);
+        r.m_render_target           = d3d11::create_render_target_view(d, r.m_render_target_texture); //todo: makesrgb
         r.m_blend_state             = gx::create_opaque_blend_state(d);
         r.m_sampler                 = gx::create_point_sampler_state(d);
         r.m_rasterizer_state        = gx::create_cull_none_rasterizer_state(d);
@@ -119,6 +123,9 @@ namespace composer
         r.m_view_port.TopLeftY = 0;
         r.m_view_port.MinDepth = 0.0f;
         r.m_view_port.MaxDepth = 1.0f;
+
+        r.m_vs_crop             = create_shader_crop_vs(d);
+        r.m_ps_crop             = create_shader_crop_ps(d);
 
         return r;
     }
