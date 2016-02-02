@@ -19,7 +19,11 @@ namespace d3d11
     inline system_context create_system_context()
     {
         //auto flags = D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_DEBUGGABLE | D3D11_CREATE_DEVICE_SWITCH_TO_REF | D3D11_CREATE_DEVICE_DISABLE_GPU_TIMEOUT; // D3D11_CREATE_DEVICE_BGRA_SUPPORT;  //D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_BGRA_SUPPORT;
-        auto flags = D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_DEBUGGABLE;// D3D11_CREATE_DEVICE_DEBUG; // | D3D11_CREATE_DEVICE_DEBUGGABLE;
+        auto flags = 0; 
+        
+#if defined(_DEBUG)
+        flags |= D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_DEBUGGABLE;
+#endif
 
         auto level = D3D_FEATURE_LEVEL_10_1;
         D3D_FEATURE_LEVEL           level_out;
@@ -46,6 +50,7 @@ namespace d3d11
         throw_if_failed<create_device_exception>(hr);
 
         system_context result = { adapter, device, context };
+        
         return std::move(result);
     }
 }
