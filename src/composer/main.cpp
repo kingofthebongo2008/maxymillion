@@ -137,6 +137,30 @@ namespace composer
         return imaging::cpu_texture();
     }
     */
+
+    compose_context* compose_images( compose_context* ctx )
+    {
+        ID3D11DeviceContext* device_context = ctx->m_system.m_immediate_context.get();
+
+        device_context->VSSetShader(nullptr, nullptr, 0);
+        device_context->PSSetShader(nullptr, nullptr, 0);
+        device_context->HSSetShader(nullptr, nullptr, 0);
+        device_context->DSSetShader(nullptr, nullptr, 0);
+        device_context->GSSetShader(nullptr, nullptr, 0);
+
+        //set render target as the back buffer, goes to the operating system
+        d3d11::om_set_render_target(device_context, ctx->m_render_target);
+
+        //set a view port for rendering
+        
+        device_context->RSSetViewports(1, &ctx->m_view_port);
+
+        //clear the back buffer
+        const float fraction = 25.0f / 128.0f;
+        d3d11::clear_render_target_view(device_context, ctx->m_render_target, math::set(fraction, fraction, fraction, 1.0f));
+
+        return ctx;
+    }
 }
 
 
@@ -159,7 +183,9 @@ int32_t main( int32_t , char const* [] )
     std::cout << "width: " << width << std::endl;
     std::cout << "height: " << height << std::endl;
 
-    auto d = composer::create_context(d3d11::create_system_context(), 2285, 1632 );
+    auto d = composer::create_context(d3d11::create_system_context(), 2284, 1632 );
+    
+    composer::compose_images(&d);
 
     return 0;
 }
