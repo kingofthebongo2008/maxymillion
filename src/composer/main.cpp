@@ -34,6 +34,16 @@ namespace composer
         shader_crop_ps                      m_ps_crop;
     };
 
+    ID3D11DeviceContext* context(compose_context& c)
+    {
+        return c.m_system.m_immediate_context.get();
+    }
+
+    ID3D11Texture2D* staging_texture(compose_context& c)
+    {
+        return c.m_staging_texture.get();
+    }
+
     DXGI_FORMAT translate_format(imaging::image_type t)
     {
         switch (t)
@@ -117,8 +127,8 @@ namespace composer
         r.m_sampler                 = gx::create_point_sampler_state(d);
         r.m_rasterizer_state        = gx::create_cull_none_rasterizer_state(d);
         
-        r.m_view_port.Width  = width;
-        r.m_view_port.Height = height;
+        r.m_view_port.Width  = static_cast<float>(width);
+        r.m_view_port.Height = static_cast<float>(height);
         r.m_view_port.TopLeftX = 0;
         r.m_view_port.TopLeftY = 0;
         r.m_view_port.MinDepth = 0.0f;
@@ -161,6 +171,42 @@ namespace composer
 
         return ctx;
     }
+
+    inline imaging::cpu_texture read_texture(D3D11_TEXTURE2D_DESC d, D3D11_MAPPED_SUBRESOURCE m )
+    {
+        auto bpp = 24; //for now
+        auto row_pitch = m.RowPitch;
+        auto row_height = d.Height;
+        auto image_size = row_pitch * row_height;
+
+        std::unique_ptr<uint8_t[]> temp(new (std::nothrow) uint8_t[image_size]);
+        uint8_t*                   source = reinterpret_cast<uint8_t*> (m.pData);
+        uint8_t*                   destination = reinterpret_cast<uint8_t*> ( temp.get() );
+
+        for (auto i = 0U; i < d.Height; ++i)
+        {
+            std::memcpy(destination + i * row_pitch, source + i * row_pitch, row_pitch );
+        }
+
+        return imaging::cpu_texture( d.Width, d.Height, bpp, static_cast<uint32_t>(image_size), static_cast<uint32_t>(row_pitch), imaging::image_type::rgb, temp.release() );
+    }
+
+    inline  imaging::cpu_texture read_texture( ID3D11DeviceContext* context, ID3D11Texture2D*  texture)
+    {
+        D3D11_MAPPED_SUBRESOURCE m = {};
+        D3D11_TEXTURE2D_DESC     d;
+
+        texture->GetDesc(&d);
+
+        os::windows::throw_if_failed<d3d11::map_resource_exception > (context->Map(texture, 0, D3D11_MAP_READ, 0, &m));
+
+        auto r = read_texture(d, m);
+
+
+        context->Unmap( texture, 0 );
+
+        return r;
+    }
 }
 
 
@@ -186,6 +232,9 @@ int32_t main( int32_t , char const* [] )
     auto d = composer::create_context(d3d11::create_system_context(), 2284, 1632 );
     
     composer::compose_images(&d);
+    auto r = composer::read_texture(context(d), staging_texture(d) );
+
+    imaging::write_texture(r, L"test.jpg");
 
     return 0;
 }

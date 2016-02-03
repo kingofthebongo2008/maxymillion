@@ -250,6 +250,15 @@ namespace d3d11
 
         }
     };
+
+    class map_resource_exception : public exception
+    {
+        public:
+        map_resource_exception(const HRESULT hr) : exception(hr)
+        {
+
+        }
+    };
 }
 
 
