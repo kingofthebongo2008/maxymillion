@@ -104,6 +104,12 @@
     <ClInclude Include="..\src\composer\shader_crop_vs.h">
       <Filter>source Files\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\composer\gpu_helper.h">
+      <Filter>source Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\gpu_texture_resource.h">
+      <Filter>source Files\src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\composer\main.cpp">

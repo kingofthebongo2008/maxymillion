@@ -227,6 +227,8 @@
     <ClInclude Include="..\include\os\windows\wnd_application.h" />
     <ClInclude Include="..\include\util\util_noncopyable.h" />
     <ClInclude Include="..\include\util\util_utf8_conv.h" />
+    <ClInclude Include="..\src\composer\gpu_helper.h" />
+    <ClInclude Include="..\src\composer\gpu_texture_resource.h" />
     <ClInclude Include="..\src\composer\precompiled.h" />
     <ClInclude Include="..\src\composer\shader_crop_ps.h" />
     <ClInclude Include="..\src\composer\shader_crop_vs.h" />
