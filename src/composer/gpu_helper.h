@@ -21,7 +21,59 @@ namespace composer
             }
         }
 
-        inline d3d11::itexture2d_ptr upload_to_gpu(ID3D11Device* device, const imaging::cpu_texture& t)
+        //todo: move this to the gpu
+        inline void upload_to_gpu( D3D11_TEXTURE2D_DESC d, D3D11_MAPPED_SUBRESOURCE m, const imaging::cpu_texture& t )
+        {
+            //assume 24 bit source
+            //assume 32 bit destination
+          
+            auto dst_row_pitch  = m.RowPitch;
+//            auto dst_row_height = d.Height;
+            auto dst_row_width  = d.Width;
+
+            auto src_row_pitch  = t.get_pitch();
+            auto src_row_height = t.get_height();
+            auto src_row_width = t.get_width();
+            
+            uint8_t* source         = reinterpret_cast<uint8_t*> (t.get_pixels().get_pixels_cpu() );
+            uint8_t* destination    = reinterpret_cast<uint8_t*> (m.pData);
+            
+
+            for (auto i = 0U; i < d.Height; ++i)
+            {
+                //position on the beginning of the row
+                uint8_t* d_row = destination + i * dst_row_pitch;
+                uint8_t* s_row = source + i * src_row_pitch;
+
+                //read the rgb values and skip the alpha
+                for (auto j = 0U; j < dst_row_width; ++j)
+                {
+                    *d_row++ = *s_row++;
+                    *d_row++ = *s_row++;
+                    *d_row++ = *s_row++;
+                    d_row++;
+                }
+            }
+        }
+
+
+        inline  d3d11::itexture2d_ptr upload_to_gpu(ID3D11DeviceContext* context, d3d11::itexture2d_ptr gpu_texture, const imaging::cpu_texture& t )
+        {
+            D3D11_MAPPED_SUBRESOURCE m = {};
+            D3D11_TEXTURE2D_DESC     d;
+
+            gpu_texture->GetDesc(&d);
+
+            os::windows::throw_if_failed<d3d11::map_resource_exception >(context->Map(gpu_texture, 0, D3D11_MAP_WRITE_DISCARD, 0, &m));
+
+            upload_to_gpu( d, m, t );
+
+            context->Unmap(gpu_texture, 0);
+
+            return gpu_texture;
+        }
+
+        inline d3d11::itexture2d_ptr upload_to_gpu(ID3D11Device* device, ID3D11DeviceContext* context, const imaging::cpu_texture& t)
         {
             D3D11_TEXTURE2D_DESC d = {};
 
@@ -31,8 +83,9 @@ namespace composer
             d.SampleDesc.Count = 1;
             d.Height = t.get_height();
             d.Width = t.get_width();
-            d.Usage = D3D11_USAGE_DEFAULT;
+            d.Usage = D3D11_USAGE_DYNAMIC;
             d.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+            d.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
             auto proxy = t.get_pixels();
 
@@ -42,7 +95,11 @@ namespace composer
             sd.SysMemPitch = t.get_pitch();
             sd.SysMemSlicePitch = t.get_size();
 
-            return d3d11::create_texture_2d(device, &d, &sd);
+            auto result = d3d11::create_texture_2d(device, &d, nullptr);
+
+            upload_to_gpu(context, result, t);
+
+            return result;
         }
 
         inline d3d11::itexture2d_ptr create_read_back_texture(ID3D11Device* device, uint32_t width, uint32_t height)

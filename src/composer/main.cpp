@@ -123,6 +123,10 @@ namespace composer
         d3d11::ia_set_vertex_buffer(device_context, nullptr, 0);
         d3d11::ia_set_input_layout(device_context, nullptr);
         d3d11::ia_set_primitive_topology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+        d3d11::ps_set_sampler_state(device_context, ctx->m_sampler);
+        d3d11::ps_set_shader_resource(device_context, ctx->m_photo_models.m_photo_model_horizontal);
+
         device_context->Draw(3, 0);
 
         return ctx->m_render_target_texture;
@@ -156,7 +160,7 @@ namespace composer
             });
         }
 
-        std::tuple < shader_crop_vs, shader_crop_ps, photo_models > create_sahders(ID3D11Device* d, const wchar_t* url0, const wchar_t* url1)
+        std::tuple < shader_crop_vs, shader_crop_ps, photo_models > create_resources(ID3D11Device* d, ID3D11DeviceContext* c, const wchar_t* url0, const wchar_t* url1)
         {
             concurrency::task_group g;
 
@@ -168,10 +172,10 @@ namespace composer
 
             g.run([&v, d]  { v = create_crop_vs(d).get(); });
             g.run([&p, d]  { p = create_crop_ps(d).get(); });
-            g.run([&m0, d, url0] { m0 = gpu::create_texture_resource( d, url0 ).get(); });
-            g.run([&m1, d, url1] { m1 = gpu::create_texture_resource(d, url1).get(); });
-
             g.wait();
+
+            m0 = gpu::create_texture_resource(d, c, url0).get();
+            m1 = gpu::create_texture_resource(d, c, url1).get();
                 
             return std::make_tuple(std::move(v), std::move(p), photo_models{ std::move(m0), std::move(m1) } );
         }
@@ -196,13 +200,11 @@ int32_t main( int32_t , char const* [] )
     auto sys = d3d11::create_system_context();
     auto d   = composer::create_context(sys, 2284, 1632 );
     
+    auto shaders = composer::async::create_resources(sys.m_device, sys.m_immediate_context, url1.get_path(), url2.get_path());
 
-    auto shaders = composer::async::create_sahders(sys.m_device, url1.get_path(), url2.get_path());
-    
     d.m_vs_crop = std::get<0>(shaders);
     d.m_ps_crop = std::get<1>(shaders);
     d.m_photo_models = std::get<2>(shaders);
-
 
     auto t0  = composer::compose_images(&d);
     auto t1  = composer::copy_texture(&d, t0);
