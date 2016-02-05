@@ -74,8 +74,12 @@ vs_samples_output main( in uint vertex_id: SV_VertexID)
     r.m_uv0 = triangle_uv(vertex_id);
 
     float3x3 t0 = translate(float2(-0.5, 0.0f));
-    //float3x3 t1 = scale(float2(0.3f, 1.0f));
+    
+#ifdef HORIZONTAL
     float3x3 t1 = scale(float2( 2285.0f/ 2464.0f, 1.0f));
+#else
+    float3x3 t1 = scale(float2(1.0f, 2285.0f / 2464.0f) );
+#endif
     float3x3 t2 = translate(float2(0.5, 0.0f));
 
     r.m_uv0 = triangle_uv(vertex_id);

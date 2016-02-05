@@ -35,6 +35,20 @@ namespace composer
                 return m_texture_srv.get();
             }
 
+            uint32_t width() const
+            {
+                D3D11_TEXTURE2D_DESC d;
+                m_texture->GetDesc(&d);
+                return d.Width;
+            }
+
+            uint32_t height() const
+            {
+                D3D11_TEXTURE2D_DESC d;
+                m_texture->GetDesc(&d);
+                return d.Height;
+            }
+
             d3d11::itexture2d_ptr               m_texture;
             d3d11::ishaderresourceview_ptr      m_texture_srv;
         };

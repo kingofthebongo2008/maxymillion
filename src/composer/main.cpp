@@ -1,7 +1,10 @@
 #include "precompiled.h"
 
 #include <cstdint>
+#include <filesystem>
 #include <iostream>
+
+#include <unordered_set>
 
 #include <ppl.h>
 
@@ -10,11 +13,13 @@
 #include <imaging/imaging_utils.h>
 #include <os/windows/com_initializer.h>
 
+
 #include <d3d11/d3d11_system.h>
 #include <d3d11/d3d11_pointers.h>
 #include <d3d11/d3d11_helpers.h>
 
-#include "shader_crop_vs.h"
+#include "shader_crop_horizontal_vs.h"
+#include "shader_crop_vertical_vs.h"
 #include "shader_crop_ps.h"
 
 #include "gpu_helper.h"
@@ -22,6 +27,12 @@
 
 namespace composer
 {
+    enum photo_mode
+    {
+        horizontal,
+        vertical
+    };
+
     struct photo_models
     {
         gpu::texture_resource               m_photo_model_horizontal;
@@ -42,11 +53,27 @@ namespace composer
         d3d11::isamplerstate_ptr            m_sampler;
         D3D11_VIEWPORT                      m_view_port;
 
-        shader_crop_vs                      m_vs_crop;
+        shader_crop_vertical_vs             m_vs_crop_vertical;
+        shader_crop_horizontal_vs           m_vs_crop_horizontal;
         shader_crop_ps                      m_ps_crop;
 
         photo_models                        m_photo_models;
+
+        uint32_t width() const
+        {
+            return static_cast<uint32_t> (m_view_port.Width - m_view_port.TopLeftX);
+        }
+
+        uint32_t height() const
+        {
+            return static_cast<uint32_t> (m_view_port.Height - m_view_port.TopLeftY);
+        }
     };
+
+    template <typename t> inline photo_mode get_mode(const t& v)
+    {
+        return v.width() > v.height() ? photo_mode::horizontal : photo_mode::vertical;
+    }
 
     struct compose_image_context
     {
@@ -86,7 +113,8 @@ namespace composer
         r.m_view_port.MinDepth = 0.0f;
         r.m_view_port.MaxDepth = 1.0f;
 
-        r.m_vs_crop             = create_shader_crop_vs(d);
+        r.m_vs_crop_horizontal  = create_shader_crop_horizontal_vs(d);
+        r.m_vs_crop_vertical    = create_shader_crop_vertical_vs(d);
         r.m_ps_crop             = create_shader_crop_ps(d);
 
         return r;
@@ -96,7 +124,15 @@ namespace composer
     {
         ID3D11DeviceContext* device_context = ctx->m_system.m_immediate_context.get();
 
-        d3d11::vs_set_shader(device_context, ctx->m_vs_crop);
+        if ( get_mode(*ctx) == photo_mode::horizontal)
+        {
+            d3d11::vs_set_shader(device_context, ctx->m_vs_crop_horizontal);
+        }
+        else
+        {
+            d3d11::vs_set_shader(device_context, ctx->m_vs_crop_vertical);
+        }
+
         d3d11::ps_set_shader(device_context, ctx->m_ps_crop);
 
         d3d11::gs_set_shader(device_context, nullptr);
@@ -123,17 +159,16 @@ namespace composer
         d3d11::ia_set_primitive_topology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
         d3d11::ps_set_sampler_state(device_context, ctx->m_sampler);
-    
-        ID3D11ShaderResourceView* views[] =
+
+        if (get_mode(*ctx) == photo_mode::horizontal)
         {
-            ctx->m_photo_models.m_photo_model_horizontal,
-            image
-        };
-
-        device_context->PSSetShaderResources(0, 2, views);
-
-        //d3d11::ps_set_shader_resources(device_context, image, ctx->m_photo_models.m_photo_model_horizontal);// , image );
-
+            d3d11::ps_set_shader_resources(device_context, ctx->m_photo_models.m_photo_model_horizontal, image);
+        }
+        else
+        {
+            d3d11::ps_set_shader_resources(device_context, ctx->m_photo_models.m_photo_model_vertical, image);
+        }
+        
         device_context->Draw(3, 0);
 
         return ctx->m_render_target_texture;
@@ -151,11 +186,19 @@ namespace composer
 {
     namespace async
     {
-        concurrency::task < shader_crop_vs > create_crop_vs(ID3D11Device* d)
+        concurrency::task < shader_crop_horizontal_vs > create_crop_horizontal_vs(ID3D11Device* d)
         {
             return concurrency::create_task([d]
             {
-                return composer::create_shader_crop_vs(d);
+                return composer::create_shader_crop_horizontal_vs(d);
+            });
+        }
+
+        concurrency::task < shader_crop_vertical_vs > create_crop_vertical_vs(ID3D11Device* d)
+        {
+            return concurrency::create_task([d]
+            {
+                return composer::create_shader_crop_vertical_vs(d);
             });
         }
 
@@ -167,25 +210,89 @@ namespace composer
             });
         }
 
-        std::tuple < shader_crop_vs, shader_crop_ps, photo_models > create_resources(ID3D11Device* d, ID3D11DeviceContext* c, const wchar_t* url0, const wchar_t* url1)
+        std::tuple < shader_crop_horizontal_vs, shader_crop_vertical_vs, shader_crop_ps, photo_models > create_resources(ID3D11Device* d, ID3D11DeviceContext* c, const wchar_t* url0, const wchar_t* url1)
         {
             concurrency::task_group g;
 
-            shader_crop_vs v;
+            shader_crop_horizontal_vs v0;
+            shader_crop_vertical_vs   v1;
             shader_crop_ps p;
 
             gpu::texture_resource m0;
             gpu::texture_resource m1;
 
-            g.run([&v, d]  { v = create_crop_vs(d).get(); });
+            g.run([&v0, d]  { v0 = create_crop_horizontal_vs(d).get(); });
+            g.run([&v1, d] { v1 = create_crop_vertical_vs(d).get(); });
             g.run([&p, d]  { p = create_crop_ps(d).get(); });
             g.wait();
 
             m0 = gpu::create_texture_resource(d, c, url0).get();
             m1 = gpu::create_texture_resource(d, c, url1).get();
                 
-            return std::make_tuple(std::move(v), std::move(p), photo_models{ std::move(m0), std::move(m1) } );
+            return std::make_tuple(std::move(v0), std::move(v1), std::move(p), photo_models{ std::move(m0), std::move(m1) } );
         }
+    }
+}
+
+static std::vector< std::wstring > file_paths( const wchar_t* file_path)
+{
+    namespace fs = std::experimental::filesystem;
+
+    fs::path someDir(file_path);
+    fs::directory_iterator end_iter;
+
+    typedef std::vector< std::wstring > result_set_t;
+    result_set_t result_set;
+    
+
+    if (fs::exists(someDir) && fs::is_directory(someDir))
+    {
+        for (fs::directory_iterator dir_iter(someDir); dir_iter != end_iter; ++dir_iter)
+        {
+            if (fs::is_regular_file(dir_iter->status()))
+            {
+                result_set.push_back( dir_iter->path() );
+            }
+        }
+    }
+
+    return result_set;
+}
+
+static std::vector< std::wstring > file_paths2( const std::vector< std::wstring >& file_path, const wchar_t* out_path )
+{
+    namespace fs = std::experimental::filesystem;
+
+    typedef std::vector< std::wstring > result_set_t;
+    result_set_t result_set;
+
+    result_set.reserve(file_path.size());
+
+    std::wstring dir(out_path);
+
+    for (auto& v : file_path)
+    {
+        fs::path p(v);
+        result_set.push_back(dir + p.filename().generic_wstring() );
+    }
+
+    return result_set;
+}
+
+
+static void convert_texture( composer::compose_context* ctx, const wchar_t* in, const wchar_t* out )
+{
+    auto l = composer::gpu::create_texture_resource(ctx->m_system.m_device, ctx->m_system.m_immediate_context, in);
+    auto t = l.get();
+
+    if ( composer::get_mode ( t ) == composer::get_mode ( *ctx) )
+    {
+        auto t0 = composer::compose_images(ctx, t);
+        auto t1 = composer::copy_texture(ctx, t0);
+
+        auto r = composer::gpu::copy_texture_to_cpu(context(*ctx), t1);
+
+        imaging::write_texture(r, out);
     }
 }
 
@@ -194,32 +301,47 @@ int32_t main( int32_t , char const* [] )
     using namespace     os::windows;
     com_initializer     com;
 
-    fs::media_source source(L"./media/");
+    fs::media_source base(L"./media/");
+    fs::media_source source_in(L"./media/in/");
+    fs::media_source source_out(L"./media/out/");
+
+    auto p = file_paths(source_in.get_path());
+    auto p2 = file_paths2(p, source_out.get_path());
 
     //read a texture
-    auto url0 = fs::build_media_url(source, L"002JD31JAn16.JPG");
+    auto url0 = fs::build_media_url(source_in, L"002JD31JAn16.JPG");
 
-    auto url1 = fs::build_media_url(source, L"model/Adele & Anthony.tif");
-    auto url2 = fs::build_media_url(source, L"model/Adele & Anthony VERT.tif");
+    auto url1 = fs::build_media_url(base, L"model/Adele & Anthony.tif");
+    auto url2 = fs::build_media_url(base, L"model/Adele & Anthony VERT.tif");
 
     //read the png texture
 
     auto sys = d3d11::create_system_context();
-    auto d   = composer::create_context(sys, 2284, 1632 );
-    
+
+    auto d0  = composer::create_context(sys, 2284, 1632 );
+    auto d1  = composer::create_context(sys, 1632, 2284 );
+
     auto shaders = composer::async::create_resources(sys.m_device, sys.m_immediate_context, url1.get_path(), url2.get_path());
 
-    d.m_vs_crop = std::get<0>(shaders);
-    d.m_ps_crop = std::get<1>(shaders);
-    d.m_photo_models = std::get<2>(shaders);
+    d0.m_vs_crop_horizontal = std::get<0>(shaders);
+    d0.m_vs_crop_vertical   = std::get<1>(shaders);
+    d0.m_ps_crop = std::get<2>(shaders);
+    d0.m_photo_models = std::get<3>(shaders);
 
-    auto l   = composer::gpu::create_texture_resource(sys.m_device, sys.m_immediate_context, url0.get_path());
+    d1.m_vs_crop_horizontal = std::get<0>(shaders);
+    d1.m_vs_crop_vertical   = std::get<1>(shaders);
+    d1.m_ps_crop = std::get<2>(shaders);
+    d1.m_photo_models = std::get<3>(shaders);
 
-    auto t0  = composer::compose_images(&d, l.get() );
-    auto t1  = composer::copy_texture(&d, t0);
-    auto r   = composer::gpu::copy_texture_to_cpu( context(d), t1 );
+    for (auto i = 0U; i < p.size(); ++i)
+    {
+        std::cout << "Picture : " << i << " of " << p.size() << std::endl;
+        auto in = p[i];
+        auto out = p2[i];
 
-    imaging::write_texture(r, L"test.jpg");
+        convert_texture(&d0, in.c_str(), out.c_str() );
+        convert_texture(&d1, in.c_str(), out.c_str());
+    }
 
     return 0;
 }
