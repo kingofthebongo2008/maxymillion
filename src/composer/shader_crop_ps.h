@@ -47,27 +47,9 @@ namespace composer
         {
         }
 
-
-
-        shader_crop_ps(shader_crop_ps&&  o) :
-            m_shader(std::move(o.m_shader))
-            , m_code(std::move(o.m_code))
-            , m_code_size(std::move(o.m_code_size))
-        {
-
-        }
-
         operator ID3D11PixelShader* () const
         {
             return m_shader.get();
-        }
-
-        shader_crop_ps& operator=(shader_crop_ps&& o)
-        {
-            m_shader = std::move(o.m_shader);
-            m_code = std::move(o.m_code);
-            m_code_size = std::move(o.m_code_size);
-            return *this;
         }
 
         d3d11::ipixelshader_ptr      m_shader;

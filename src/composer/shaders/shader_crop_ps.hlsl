@@ -15,6 +15,6 @@ struct vs_samples_output
 
 float4 main(in vs_samples_output i) : sv_target0
 {
-    return float4(1.0f, 0.0f, 0.0f, 0.0f);
+    return float4(0.0f, 1.0f, 0.0f, 1.0f);
 }
 

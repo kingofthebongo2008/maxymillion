@@ -35,12 +35,13 @@ namespace composer
     {
 
     public:
+
         shader_crop_vs()
         {
 
         }
 
-        explicit shader_crop_vs(vertex_shader_create_info info) :
+        explicit shader_crop_vs( vertex_shader_create_info info ) :
             m_shader(std::get<0>(info))
             , m_code(std::get<1>(info))
             , m_code_size(std::get<2>(info))
@@ -48,26 +49,9 @@ namespace composer
         }
 
 
-
-        shader_crop_vs(shader_crop_vs&&  o) :
-            m_shader(std::move(o.m_shader))
-            , m_code(std::move(o.m_code))
-            , m_code_size(std::move(o.m_code_size))
-        {
-
-        }
-
         operator ID3D11VertexShader* () const
         {
             return m_shader.get();
-        }
-
-        shader_crop_vs& operator=(shader_crop_vs&& o)
-        {
-            m_shader = std::move(o.m_shader);
-            m_code = std::move(o.m_code);
-            m_code_size = std::move(o.m_code_size);
-            return *this;
         }
 
         d3d11::ivertexshader_ptr     m_shader;

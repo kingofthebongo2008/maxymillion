@@ -860,6 +860,11 @@ namespace d3d11
         om_set_render_target( device_context, sizeof(render_target_view) / sizeof(render_target_view[0]), render_target_view, nullptr);
     }
     //----------------------------------------------------------------------------------------------------------
+    inline void copy_resource(ID3D11DeviceContext* device_context, ID3D11Resource* destination, ID3D11Resource* source)
+    {
+        device_context->CopyResource(destination, source);
+    }
+    //----------------------------------------------------------------------------------------------------------
     template <typename t> inline void om_set_render_targets( ID3D11DeviceContext* device_context, t begin, t end, ID3D11DepthStencilView* const depth_view )
     {
         om_set_render_target( device_context, static_cast<uint32_t> ( std::distance( begin, end )), &( static_cast< ID3D11RenderTargetView* const> (*begin) ), depth_view);
