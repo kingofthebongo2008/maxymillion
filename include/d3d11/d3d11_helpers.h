@@ -612,13 +612,13 @@ namespace d3d11
     inline void ps_set_shader_resources(ID3D11DeviceContext* device_context, resource_slot slot, const ID3D11ShaderResourceView * const resource_0, const ID3D11ShaderResourceView * const resource_1, const ID3D11ShaderResourceView * const resource_2)
     {
         ID3D11ShaderResourceView * const resources[3] = { const_cast<ID3D11ShaderResourceView*> (resource_0), const_cast<ID3D11ShaderResourceView*> (resource_1), const_cast<ID3D11ShaderResourceView*> (resource_2) };
-        ps_set_shader_resources( device_context, slot,  resources);
+        ps_set_shader_resources( device_context, slot, resource_count(3), resources);
     }
     //----------------------------------------------------------------------------------------------------------
     inline void ps_set_shader_resources(ID3D11DeviceContext* device_context, resource_slot slot, const ID3D11ShaderResourceView * const resource_0, const ID3D11ShaderResourceView * const resource_1)
     {
         ID3D11ShaderResourceView * const resources[2] = { const_cast<ID3D11ShaderResourceView*> (resource_0), const_cast<ID3D11ShaderResourceView*> (resource_1) };
-        ps_set_shader_resources( device_context, slot,  resources);
+        ps_set_shader_resources( device_context, slot, resource_count(2), resources);
     }
     //----------------------------------------------------------------------------------------------------------
     inline void ps_set_shader_resources(ID3D11DeviceContext* device_context, const ID3D11ShaderResourceView * const resource_0, const ID3D11ShaderResourceView * const resource_1, const ID3D11ShaderResourceView * const resource_2 )
