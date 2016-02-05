@@ -32,8 +32,8 @@ namespace composer
             auto dst_row_width  = d.Width;
 
             auto src_row_pitch  = t.get_pitch();
-            auto src_row_height = t.get_height();
-            auto src_row_width = t.get_width();
+            //auto src_row_height = t.get_height();
+            //auto src_row_width = t.get_width();
             
             uint8_t* source         = reinterpret_cast<uint8_t*> (t.get_pixels().get_pixels_cpu() );
             uint8_t* destination    = reinterpret_cast<uint8_t*> (m.pData);

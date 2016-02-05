@@ -64,7 +64,6 @@ namespace composer
         return c.m_read_back_texture.get();
     }
 
-
     inline compose_context create_context(d3d11::system_context system, uint32_t width, uint32_t height)
     {
         compose_context r;
@@ -93,8 +92,7 @@ namespace composer
         return r;
     }
 
-
-    inline d3d11::itexture2d_ptr compose_images( compose_context* ctx )
+    inline d3d11::itexture2d_ptr compose_images( compose_context* ctx, const gpu::texture_resource image )
     {
         ID3D11DeviceContext* device_context = ctx->m_system.m_immediate_context.get();
 
@@ -125,7 +123,16 @@ namespace composer
         d3d11::ia_set_primitive_topology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
         d3d11::ps_set_sampler_state(device_context, ctx->m_sampler);
-        d3d11::ps_set_shader_resource(device_context, ctx->m_photo_models.m_photo_model_horizontal);
+    
+        ID3D11ShaderResourceView* views[] =
+        {
+            ctx->m_photo_models.m_photo_model_horizontal,
+            image
+        };
+
+        device_context->PSSetShaderResources(0, 2, views);
+
+        //d3d11::ps_set_shader_resources(device_context, image, ctx->m_photo_models.m_photo_model_horizontal);// , image );
 
         device_context->Draw(3, 0);
 
@@ -190,7 +197,7 @@ int32_t main( int32_t , char const* [] )
     fs::media_source source(L"./media/");
 
     //read a texture
-    auto url0 = fs::build_media_url(source, L"001JD31JAn16.JPG");
+    auto url0 = fs::build_media_url(source, L"002JD31JAn16.JPG");
 
     auto url1 = fs::build_media_url(source, L"model/Adele & Anthony.tif");
     auto url2 = fs::build_media_url(source, L"model/Adele & Anthony VERT.tif");
@@ -206,7 +213,9 @@ int32_t main( int32_t , char const* [] )
     d.m_ps_crop = std::get<1>(shaders);
     d.m_photo_models = std::get<2>(shaders);
 
-    auto t0  = composer::compose_images(&d);
+    auto l   = composer::gpu::create_texture_resource(sys.m_device, sys.m_immediate_context, url0.get_path());
+
+    auto t0  = composer::compose_images(&d, l.get() );
     auto t1  = composer::copy_texture(&d, t0);
     auto r   = composer::gpu::copy_texture_to_cpu( context(d), t1 );
 

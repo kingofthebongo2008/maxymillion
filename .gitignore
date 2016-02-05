@@ -9,3 +9,4 @@
 *.pdb
 bin/
 tmp/
+doc/
