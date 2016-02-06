@@ -14,9 +14,9 @@ namespace d3d11
         idevicecontext_ptr          m_immediate_context;
     };
 
-    system_context create_system_context();
+    std::shared_ptr<system_context> create_system_context();
 
-    inline system_context create_system_context()
+    inline std::shared_ptr<system_context> create_system_context()
     {
         //auto flags = D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_DEBUGGABLE | D3D11_CREATE_DEVICE_SWITCH_TO_REF | D3D11_CREATE_DEVICE_DISABLE_GPU_TIMEOUT; // D3D11_CREATE_DEVICE_BGRA_SUPPORT;  //D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_BGRA_SUPPORT;
         auto flags = 0; 
@@ -50,8 +50,8 @@ namespace d3d11
         throw_if_failed<create_device_exception>(hr);
 
         system_context result = { adapter, device, context };
-        
-        return std::move(result);
+
+        return std::make_shared< system_context >(std::move(result));
     }
 }
 

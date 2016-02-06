@@ -45,10 +45,10 @@ namespace composer
     {
         public:
 
-        shared_compose_context( d3d11::system_context system, const std::wstring& url_horizontal, const std::wstring& url_vertical ) : m_system(system)
+        shared_compose_context( const::std::shared_ptr<d3d11::system_context> system, const std::wstring& url_horizontal, const std::wstring& url_vertical ) : m_system(system)
         {
-            auto d = system.m_device.get();
-            auto c = system.m_immediate_context.get();
+            auto d = system->m_device.get();
+            auto c = system->m_immediate_context.get();
 
             m_vs_crop_horizontal = create_shader_crop_horizontal_vs(d);
             m_vs_crop_vertical = create_shader_crop_vertical_vs(d);
@@ -61,17 +61,16 @@ namespace composer
 
             m_photo_models.m_photo_model_horizontal = gpu::create_texture_resource(d, c, url_horizontal.c_str()).get();
             m_photo_models.m_photo_model_vertical   = gpu::create_texture_resource(d, c, url_vertical.c_str() ).get();
-
         }
 
         operator ID3D11Device* () const
         {
-            return m_system.m_device.get();
+            return m_system->m_device.get();
         }
 
         operator ID3D11DeviceContext* () const
         {
-            return m_system.m_immediate_context.get();
+            return m_system->m_immediate_context.get();
         }
 
         ID3D11VertexShader* get_crop_shader_vs(photo_mode mode) const
@@ -126,7 +125,7 @@ namespace composer
         //shared
         private:
 
-        d3d11::system_context               m_system;
+        std::shared_ptr<d3d11::system_context>              m_system;
 
         //shared read only
         d3d11::iblendstate_ptr              m_blend_state;
@@ -363,9 +362,11 @@ static void convert_texture( const std::shared_ptr<composer::compose_context>& c
 
         auto r = composer::gpu::copy_texture_to_cpu( static_cast<ID3D11DeviceContext*> ( *ctx ), t0);
 
-        concurrency::create_task([r, out ]
+        std::wstring w(out);
+
+        concurrency::create_task([r, w ]
         {
-            imaging::write_texture(r, out.c_str() );
+            imaging::write_texture(r, w.c_str() );
         });
     }
 }
@@ -383,15 +384,18 @@ int32_t main( int32_t , char const* [] )
     auto p2 = file_paths2(p, source_out.get_path());
 
     //read a texture
-    auto url0 = fs::build_media_url(source_in, L"002JD31JAn16.JPG");
-
     auto url1 = fs::build_media_url(base, L"model/Adele & Anthony.tif");
     auto url2 = fs::build_media_url(base, L"model/Adele & Anthony VERT.tif");
 
     //read the png texture
 
-    auto sys = d3d11::create_system_context();
-    auto shared = std::make_shared< composer::shared_compose_context >(sys, url1.get_path_wstring(), url2.get_path_wstring());
+    std::wcout << L"source directory: " << source_in.get_path_wstring() << std::endl;
+    std::wcout << L"destination directory: " << source_out.get_path_wstring() << std::endl;
+
+    std::wcout << L"horizontal model: " << url1.get_path_wstring() << std::endl;
+    std::wcout << L"vertical   model: " << url2.get_path_wstring() << std::endl;
+
+    auto shared = std::make_shared< composer::shared_compose_context >(d3d11::create_system_context(), url1.get_path_wstring(), url2.get_path_wstring());
 
     auto d0  = std::make_shared< composer::compose_context> ( shared, 2284, 1632 );
     auto d1  = std::make_shared< composer::compose_context> ( shared, 1632, 2284 );
