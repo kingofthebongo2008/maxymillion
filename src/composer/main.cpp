@@ -351,12 +351,29 @@ static std::vector< std::wstring > file_paths2( const std::vector< std::wstring 
     return result_set;
 }
 
-static void convert_texture( const std::shared_ptr<composer::compose_context>& ctx, const std::wstring& in, const std::wstring& out)
+static void convert_texture( const std::shared_ptr<composer::shared_compose_context>& shared, const std::wstring& in, const std::wstring& out)
 {
-    auto l = composer::gpu::create_texture_resource( *ctx, *ctx, in.c_str() );
+    auto l = composer::gpu::create_texture_resource( *shared, *shared, in.c_str() );
+
     auto t = l.get();
 
-    if ( composer::get_mode ( t ) == composer::get_mode ( *ctx) )
+    uint32_t size[2] = { 2284, 1632 };
+    uint32_t width;
+    uint32_t height;
+
+    if ( t.width() > t.height() )
+    {
+        width = size[0];
+        height = size[1];
+    }
+    else
+    {
+        width = size[1];
+        height = size[0];
+    }
+
+    auto ctx = std::make_shared< composer::compose_context>(shared, width, height);
+
     {
         auto t0 = ctx->compose_image(t);
 
@@ -397,18 +414,13 @@ int32_t main( int32_t , char const* [] )
 
     auto shared = std::make_shared< composer::shared_compose_context >(d3d11::create_system_context(), url1.get_path_wstring(), url2.get_path_wstring());
 
-    auto d0  = std::make_shared< composer::compose_context> ( shared, 2284, 1632 );
-    auto d1  = std::make_shared< composer::compose_context> ( shared, 1632, 2284 );
-
-
     for (auto i = 0U; i < p.size(); ++i)
     {
         std::cout << "Picture : " << i << " of " << p.size() << std::endl;
         auto in = p[i];
         auto out = p2[i];
 
-        convert_texture(d0, in, out);
-        convert_texture(d1, in, out);
+        convert_texture(shared, in, out);
     }
 
     return 0;
