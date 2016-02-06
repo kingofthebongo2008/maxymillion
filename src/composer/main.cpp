@@ -279,7 +279,6 @@ static std::vector< std::wstring > file_paths2( const std::vector< std::wstring 
     return result_set;
 }
 
-
 static void convert_texture( composer::compose_context* ctx, const wchar_t* in, const wchar_t* out )
 {
     auto l = composer::gpu::create_texture_resource(ctx->m_system.m_device, ctx->m_system.m_immediate_context, in);
@@ -291,8 +290,12 @@ static void convert_texture( composer::compose_context* ctx, const wchar_t* in, 
         auto t1 = composer::copy_texture(ctx, t0);
 
         auto r = composer::gpu::copy_texture_to_cpu(context(*ctx), t1);
+        auto w = std::wstring(out);
 
-        imaging::write_texture(r, out);
+        concurrency::create_task([r, w ]
+        {
+            imaging::write_texture(r, w.c_str() );
+        });
     }
 }
 
