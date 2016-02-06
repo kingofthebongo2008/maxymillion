@@ -87,14 +87,6 @@ namespace composer
             d.BindFlags = D3D11_BIND_SHADER_RESOURCE;
             d.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-            auto proxy = t.get_pixels();
-
-            D3D11_SUBRESOURCE_DATA sd = {};
-
-            sd.pSysMem = proxy.get_pixels_cpu();
-            sd.SysMemPitch = t.get_pitch();
-            sd.SysMemSlicePitch = t.get_size();
-
             auto result = d3d11::create_texture_2d(device, &d, nullptr);
 
             upload_to_gpu(context, result, t);
