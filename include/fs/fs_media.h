@@ -28,6 +28,12 @@ namespace fs
             return m_path.c_str();
         }
 
+        const std::wstring& get_path_wstring() const
+        {
+            return m_path;
+        }
+
+
     private:
 
         std::wstring m_path;
@@ -55,6 +61,11 @@ namespace fs
         const wchar_t* get_path() const
         {
             return m_file_name.c_str();
+        }
+
+        const std::wstring& get_path_wstring() const
+        {
+            return m_file_name;
         }
 
     private:

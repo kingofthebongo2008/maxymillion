@@ -22,7 +22,7 @@ namespace d3d11
         auto flags = 0; 
         
 #if defined(_DEBUG)
-        flags |= D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_DEBUGGABLE;
+        flags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
         auto level = D3D_FEATURE_LEVEL_11_0;
@@ -46,7 +46,7 @@ namespace d3d11
 
         using namespace os::windows;
 
-        hr = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, flags, &level, 1, D3D11_SDK_VERSION, &device, &level_out, &context);
+        hr = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_WARP, 0, flags, &level, 1, D3D11_SDK_VERSION, &device, &level_out, &context);
         throw_if_failed<create_device_exception>(hr);
 
         system_context result = { adapter, device, context };
