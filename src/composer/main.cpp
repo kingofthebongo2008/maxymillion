@@ -380,11 +380,7 @@ static void convert_texture( const std::shared_ptr<composer::shared_compose_cont
         auto r = composer::gpu::copy_texture_to_cpu( static_cast<ID3D11DeviceContext*> ( *ctx ), t0);
 
         std::wstring w(out);
-
-        concurrency::create_task([r, w ]
-        {
-            imaging::write_texture(r, w.c_str() );
-        });
+        imaging::write_texture(r, w.c_str() );
     }
 }
 
