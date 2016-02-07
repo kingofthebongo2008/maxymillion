@@ -48,6 +48,14 @@ namespace d3d11
         os::windows::throw_if_failed< d3d11::create_render_target_view_exception> (device->CreateRenderTargetView(resource, description, &result ) );
         return result;
     }
+
+    //----------------------------------------------------------------------------------------------------------
+    inline idevicecontext_ptr    create_defered_context( ID3D11Device* device )
+    {
+        idevicecontext_ptr result;
+        os::windows::throw_if_failed< d3d11::create_deferred_context_exception>(device->CreateDeferredContext( 0, &result ));
+        return result;
+    }
     //----------------------------------------------------------------------------------------------------------
     inline irendertargetview_ptr    create_render_target_view(ID3D11Device* device, ID3D11Resource* resource )
     {
@@ -868,6 +876,13 @@ namespace d3d11
     template <typename t> inline void om_set_render_targets( ID3D11DeviceContext* device_context, t begin, t end )
     {
         om_set_render_targets( device_context, begin, end, nullptr);
+    }
+
+    inline icommandlist_ptr finish_command_list(ID3D11DeviceContext* device_context)
+    {
+        icommandlist_ptr result;
+        os::windows::throw_if_failed< d3d11::finish_command_list_exception>(device_context->FinishCommandList(false, &result) );
+        return result;
     }
 }
 

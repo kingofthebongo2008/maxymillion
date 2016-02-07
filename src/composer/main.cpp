@@ -166,10 +166,8 @@ namespace composer
             m_view_port.MaxDepth = 1.0f;
         }
 
-        d3d11::itexture2d_ptr compose_image(  const gpu::texture_resource image )
+        d3d11::itexture2d_ptr compose_image(  const gpu::texture_resource image, ID3D11DeviceContext* device_context)
         {
-            ID3D11DeviceContext* device_context = static_cast<ID3D11DeviceContext*>(*m_shared_context );
-
             d3d11::vs_set_shader(device_context, m_shared_context->get_crop_shader_vs(get_mode(*this)));
             d3d11::ps_set_shader(device_context, m_shared_context->get_crop_shader_ps());
 
@@ -351,9 +349,12 @@ static std::vector< std::wstring > file_paths2( const std::vector< std::wstring 
     return result_set;
 }
 
+static std::mutex g_immediate_context_lock;
+
 static void convert_texture( const std::shared_ptr<composer::shared_compose_context>& shared, const std::wstring& in, const std::wstring& out)
 {
-    auto l = composer::gpu::create_texture_resource( *shared, *shared, in.c_str() );
+    auto dc = d3d11::create_defered_context(*shared);
+    auto l = composer::gpu::create_texture_resource( *shared, dc, in.c_str() );
 
     auto t = l.get();
 
@@ -375,9 +376,17 @@ static void convert_texture( const std::shared_ptr<composer::shared_compose_cont
     auto ctx = std::make_shared< composer::compose_context>(shared, width, height);
 
     {
-        auto t0 = ctx->compose_image(t);
+        auto t0 = ctx->compose_image(t, dc );
 
-        auto r = composer::gpu::copy_texture_to_cpu( static_cast<ID3D11DeviceContext*> ( *ctx ), t0);
+        d3d11::icommandlist_ptr list = d3d11::finish_command_list(dc);
+
+        g_immediate_context_lock.lock();
+        ID3D11DeviceContext* immediate_context = static_cast<ID3D11DeviceContext*> (*ctx);
+
+        immediate_context->ExecuteCommandList(list, false);
+        auto r = composer::gpu::copy_texture_to_cpu( immediate_context , t0);
+
+        g_immediate_context_lock.unlock();
 
         std::wstring w(out);
         imaging::write_texture(r, w.c_str() );
