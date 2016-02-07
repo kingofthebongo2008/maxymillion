@@ -5,8 +5,9 @@
 #include <iostream>
 
 #include <unordered_set>
-
 #include <ppl.h>
+
+#include <sys/sys_profile_timer.h>
 
 #include <fs/fs_media.h>
 #include <gx/gx_render_resource.h>
@@ -24,8 +25,9 @@
 
 #include "gpu_helper.h"
 #include "gpu_texture_resource.h"
-
 #include "gpu_pool_resources.h"
+
+static std::mutex g_immediate_context_lock;
 
 namespace composer
 {
@@ -45,22 +47,80 @@ namespace composer
     {
         public:
 
-        shared_compose_context( const::std::shared_ptr<d3d11::system_context> system, const std::wstring& url_horizontal, const std::wstring& url_vertical ) : m_system(system)
+        shared_compose_context( const::std::shared_ptr<d3d11::system_context>& system, const std::wstring& url_horizontal, const std::wstring& url_vertical ) : m_system(system)
         {
             auto d = system->m_device.get();
             auto c = system->m_immediate_context.get();
 
-            m_vs_crop_horizontal = create_shader_crop_horizontal_vs(d);
-            m_vs_crop_vertical = create_shader_crop_vertical_vs(d);
-            m_ps_crop = create_shader_crop_ps(d);
+            concurrency::task_group g;
 
-            m_blend_state = gx::create_opaque_blend_state(d);
-            m_sampler = gx::create_point_sampler_state(d);
-            m_rasterizer_state = gx::create_cull_none_rasterizer_state(d);
-            m_depth_state = gx::create_depth_test_disable_state(d);
+            g.run([this, d]()
+            {
+                m_vs_crop_horizontal = create_shader_crop_horizontal_vs(d);
+            });
 
-            m_photo_models.m_photo_model_horizontal = gpu::create_texture_resource(d, c, url_horizontal.c_str()).get();
-            m_photo_models.m_photo_model_vertical   = gpu::create_texture_resource(d, c, url_vertical.c_str() ).get();
+            g.run([this, d]()
+            {
+                m_vs_crop_vertical = create_shader_crop_vertical_vs(d);
+            });
+
+            g.run([this, d]()
+            {
+                m_ps_crop = create_shader_crop_ps(d);
+            });
+            
+            
+            g.run([this, d]()
+            {
+                m_blend_state = gx::create_opaque_blend_state(d);
+            });
+            
+
+            g.run([this, d]()
+            {
+                m_sampler = gx::create_point_sampler_state(d);
+            });
+
+            g.run([this, d]()
+            {
+                m_rasterizer_state = gx::create_cull_none_rasterizer_state(d);
+            });
+
+            g.run([this, d] ()
+            {
+                m_depth_state = gx::create_depth_test_disable_state(d);
+            });
+
+            g.run([this, d, c, url_horizontal, system]()
+            {
+                auto dc = d3d11::create_defered_context( d );
+                m_photo_models.m_photo_model_horizontal = gpu::create_texture_resource(d, dc, url_horizontal.c_str()).get();
+
+                auto list = d3d11::finish_command_list(dc);
+                {
+                    g_immediate_context_lock.lock();
+                    c->ExecuteCommandList(list, false);
+                    g_immediate_context_lock.unlock();
+                }
+
+            });
+
+            g.run([this, d, c, url_vertical, system]()
+            {
+                auto dc = d3d11::create_defered_context(d);
+                m_photo_models.m_photo_model_vertical = gpu::create_texture_resource(d, dc, url_vertical.c_str()).get();
+                auto list = d3d11::finish_command_list(dc);
+
+
+                {
+                    g_immediate_context_lock.lock();
+                    c->ExecuteCommandList(list, false);
+                    g_immediate_context_lock.unlock();
+                }
+            });
+            
+            g.wait();
+
         }
 
         operator ID3D11Device* () const
@@ -349,8 +409,6 @@ static std::vector< std::wstring > file_paths2( const std::vector< std::wstring 
     return result_set;
 }
 
-static std::mutex g_immediate_context_lock;
-
 static void convert_texture( const std::shared_ptr<composer::shared_compose_context>& shared, const std::wstring& in, const std::wstring& out)
 {
     auto dc = d3d11::create_defered_context(*shared);
@@ -395,6 +453,7 @@ static void convert_texture( const std::shared_ptr<composer::shared_compose_cont
 
 int32_t main( int32_t , char const* [] )
 {
+    sys::profile_timer  timer;
     using namespace     os::windows;
     com_initializer     com;
 
@@ -419,14 +478,18 @@ int32_t main( int32_t , char const* [] )
 
     auto shared = std::make_shared< composer::shared_compose_context >(d3d11::create_system_context(), url1.get_path_wstring(), url2.get_path_wstring());
 
-    for (auto i = 0U; i < p.size(); ++i)
+    std::cout << "Initialization " << timer.milliseconds() << " ms" << std::endl;
+    timer.reset();
+
+    concurrency::parallel_for( 0U, static_cast<uint32_t>( p.size()), [&shared, &p, &p2] ( uint32_t i )
     {
-        std::cout << "Picture : " << i << " of " << p.size() << std::endl;
         auto in = p[i];
         auto out = p2[i];
-
         convert_texture(shared, in, out);
-    }
+    });
+
+    std::cout << "Conversion " << timer.milliseconds() << " ms" << std::endl;
+    timer.reset();
 
     return 0;
 }
