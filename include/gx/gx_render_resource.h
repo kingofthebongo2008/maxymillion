@@ -23,7 +23,7 @@ namespace gx
 
         render_target_resource (    
                                     d3d11::itexture2d_ptr               resource,
-                                    d3d11::id3d11rendertargetview_ptr   resource_rtv,
+                                    d3d11::irendertargetview_ptr   resource_rtv,
                                     d3d11::ishaderresourceview_ptr	    resource_srv
                                 ) : m_resource(resource) , m_resource_rtv(resource_rtv), m_resource_srv(resource_srv)
         {
@@ -61,7 +61,7 @@ namespace gx
         }
 
         d3d11::itexture2d_ptr               m_resource;
-        d3d11::id3d11rendertargetview_ptr   m_resource_rtv;
+        d3d11::irendertargetview_ptr   m_resource_rtv;
         d3d11::ishaderresourceview_ptr      m_resource_srv;
 
     };

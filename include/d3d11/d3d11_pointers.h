@@ -18,7 +18,7 @@ namespace d3d11
 
     typedef os::windows::com_ptr<ID3D11Resource>            iresource_ptr;
     typedef os::windows::com_ptr<ID3D11Texture2D>           itexture2d_ptr;
-    typedef os::windows::com_ptr<ID3D11RenderTargetView>    id3d11rendertargetview_ptr;
+    typedef os::windows::com_ptr<ID3D11RenderTargetView>    irendertargetview_ptr;
 
 
     typedef os::windows::com_ptr<ID3D11ShaderResourceView>  ishaderresourceview_ptr;
@@ -40,6 +40,8 @@ namespace d3d11
     typedef os::windows::com_ptr<ID3D11InputLayout>         iinputlayout_ptr;
 
     typedef os::windows::com_ptr<ID3D11UnorderedAccessView> iunordered_access_view_ptr;
+
+    typedef os::windows::com_ptr<ID3D11Query>               iquery_ptr;
 
 }
 

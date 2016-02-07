@@ -42,14 +42,14 @@ namespace d3d11
         return result;
     }
     //----------------------------------------------------------------------------------------------------------
-    inline id3d11rendertargetview_ptr    create_render_target_view(ID3D11Device* device, ID3D11Resource* resource, const D3D11_RENDER_TARGET_VIEW_DESC* description )
+    inline irendertargetview_ptr    create_render_target_view(ID3D11Device* device, ID3D11Resource* resource, const D3D11_RENDER_TARGET_VIEW_DESC* description )
     {
-        id3d11rendertargetview_ptr result;
+        irendertargetview_ptr result;
         os::windows::throw_if_failed< d3d11::create_render_target_view_exception> (device->CreateRenderTargetView(resource, description, &result ) );
         return result;
     }
     //----------------------------------------------------------------------------------------------------------
-    inline id3d11rendertargetview_ptr    create_render_target_view(ID3D11Device* device, ID3D11Resource* resource )
+    inline irendertargetview_ptr    create_render_target_view(ID3D11Device* device, ID3D11Resource* resource )
     {
         return create_render_target_view(device, resource, nullptr);
     }

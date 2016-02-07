@@ -19,13 +19,14 @@ namespace d3d11
     inline std::shared_ptr<system_context> create_system_context()
     {
         //auto flags = D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_DEBUGGABLE | D3D11_CREATE_DEVICE_SWITCH_TO_REF | D3D11_CREATE_DEVICE_DISABLE_GPU_TIMEOUT; // D3D11_CREATE_DEVICE_BGRA_SUPPORT;  //D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_BGRA_SUPPORT;
-        auto flags = 0; 
+        auto flags = 0;// D3D11_CREATE_DEVICE_DEBUG;
         
 #if defined(_DEBUG)
         flags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
+        //flags |= D3D11_CREATE_DEVICE_DEBUG;
 
-        auto level = D3D_FEATURE_LEVEL_11_0;
+        auto level = D3D_FEATURE_LEVEL_10_0;
         D3D_FEATURE_LEVEL           level_out;
 
         idevicecontext_ptr          context;
@@ -46,7 +47,7 @@ namespace d3d11
 
         using namespace os::windows;
 
-        hr = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_WARP, 0, flags, &level, 1, D3D11_SDK_VERSION, &device, &level_out, &context);
+        hr = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, flags, &level, 1, D3D11_SDK_VERSION, &device, &level_out, &context);
         throw_if_failed<create_device_exception>(hr);
 
         system_context result = { adapter, device, context };

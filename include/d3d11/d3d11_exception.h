@@ -259,6 +259,24 @@ namespace d3d11
 
         }
     };
+
+    class create_query_exception : public exception
+    {
+    public:
+        create_query_exception(const HRESULT hr) : exception(hr)
+        {
+
+        }
+    };
+
+    class finish_command_list_exception : public exception
+    {
+    public:
+        finish_command_list_exception(const HRESULT hr) : exception(hr)
+        {
+
+        }
+    };
 }
 
 

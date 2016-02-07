@@ -225,7 +225,7 @@ namespace composer
         D3D11_VIEWPORT                      m_view_port;
 
         //pool
-        d3d11::id3d11rendertargetview_ptr   m_render_target;
+        d3d11::irendertargetview_ptr        m_render_target;
         d3d11::itexture2d_ptr               m_render_target_texture;
         d3d11::itexture2d_ptr               m_read_back_texture;
 
