@@ -93,24 +93,14 @@ namespace composer
             {
                 auto dc = d3d11::create_defered_context( d );
                 m_photo_models.m_photo_model_horizontal = gpu::create_texture_resource(d, dc, url_horizontal.c_str()).get();
-
-                auto list = d3d11::finish_command_list(dc);
-                {
-                    execute_command_list(list);
-                }
-
+                execute_command_list(d3d11::finish_command_list(dc));
             });
 
             g.run([this, d, c, url_vertical, system]()
             {
                 auto dc = d3d11::create_defered_context(d);
                 m_photo_models.m_photo_model_vertical = gpu::create_texture_resource(d, dc, url_vertical.c_str()).get();
-                auto list = d3d11::finish_command_list(dc);
-
-
-                {
-                    execute_command_list(list);
-                }
+                execute_command_list(d3d11::finish_command_list(dc));
             });
             
             g.wait();
