@@ -41,14 +41,13 @@ namespace composer
         gpu::texture_resource               m_photo_model_vertical;
     };
 
-    class shared_compose_context
+    class shared_system_context
     {
         public:
 
-        shared_compose_context( const::std::shared_ptr<d3d11::system_context>& system, const std::wstring& url_horizontal, const std::wstring& url_vertical ) : m_system(system)
+        shared_system_context(const::std::shared_ptr<d3d11::system_context>& system) : m_system(system)
         {
             auto d = system->m_device.get();
-            auto c = system->m_immediate_context.get();
 
             concurrency::task_group g;
 
@@ -66,13 +65,13 @@ namespace composer
             {
                 m_ps_crop = create_shader_crop_ps(d);
             });
-            
-            
+
+
             g.run([this, d]()
             {
                 m_blend_state = gx::create_opaque_blend_state(d);
             });
-            
+
 
             g.run([this, d]()
             {
@@ -84,28 +83,14 @@ namespace composer
                 m_rasterizer_state = gx::create_cull_none_rasterizer_state(d);
             });
 
-            g.run([this, d] ()
+            g.run([this, d]()
             {
                 m_depth_state = gx::create_depth_test_disable_state(d);
             });
 
-            g.run([this, d, c, url_horizontal, system]()
-            {
-                auto dc = d3d11::create_defered_context( d );
-                m_photo_models.m_photo_model_horizontal = gpu::create_texture_resource(d, dc, url_horizontal.c_str()).get();
-                execute_command_list(d3d11::finish_command_list(dc));
-            });
-
-            g.run([this, d, c, url_vertical, system]()
-            {
-                auto dc = d3d11::create_defered_context(d);
-                m_photo_models.m_photo_model_vertical = gpu::create_texture_resource(d, dc, url_vertical.c_str()).get();
-                execute_command_list(d3d11::finish_command_list(dc));
-            });
-            
             g.wait();
-
         }
+
 
         operator ID3D11Device* () const
         {
@@ -134,18 +119,6 @@ namespace composer
             return m_ps_crop;
         }
 
-        ID3D11ShaderResourceView* get_model_texture(photo_mode mode) const
-        {
-            if (mode == photo_mode::horizontal)
-            {
-                return this->m_photo_models.m_photo_model_horizontal.m_texture_srv.get();
-            }
-            else
-            {
-                return this->m_photo_models.m_photo_model_vertical.m_texture_srv.get();
-            }
-        }
-
         operator ID3D11BlendState*()  const
         {
             return m_blend_state.get();
@@ -172,33 +145,128 @@ namespace composer
             m_system->m_immediate_context->ExecuteCommandList(list, FALSE);
         }
 
-        template <typename r, typename f> r execute_command_list(ID3D11CommandList* list, f f )
+        template <typename r, typename f> r execute_command_list(ID3D11CommandList* list, f f)
         {
             std::lock_guard < std::mutex > g(m_immediate_context_lock);
             m_system->m_immediate_context->ExecuteCommandList(list, FALSE);
             return f();
         }
 
-
-        //shared
-        private:
+    private:
 
         std::shared_ptr<d3d11::system_context>              m_system;
         std::mutex                                          m_immediate_context_lock;
 
         //shared read only
-        d3d11::iblendstate_ptr              m_blend_state;
-        d3d11::irasterizerstate_ptr         m_rasterizer_state;
-        d3d11::idepthstencilstate_ptr       m_depth_state;
-        d3d11::isamplerstate_ptr            m_sampler;
+        d3d11::iblendstate_ptr                              m_blend_state;
+        d3d11::irasterizerstate_ptr                         m_rasterizer_state;
+        d3d11::idepthstencilstate_ptr                       m_depth_state;
+        d3d11::isamplerstate_ptr                            m_sampler;
 
         //shared read only
-        shader_crop_vertical_vs             m_vs_crop_vertical;
-        shader_crop_horizontal_vs           m_vs_crop_horizontal;
-        shader_crop_ps                      m_ps_crop;
+        shader_crop_vertical_vs                             m_vs_crop_vertical;
+        shader_crop_horizontal_vs                           m_vs_crop_horizontal;
+        shader_crop_ps                                      m_ps_crop;
 
+    };
+
+    class shared_compose_context
+    {
+        public:
+
+        shared_compose_context( const::std::shared_ptr<shared_system_context>& system, const std::wstring& url_horizontal, const std::wstring& url_vertical ) : m_system(system)
+        {
+            auto d = static_cast<ID3D11Device*> (*this);
+            auto c = static_cast<ID3D11DeviceContext*> (*this);
+
+            concurrency::task_group g;
+
+            g.run([this, d, c, url_horizontal, system]()
+            {
+                auto dc = d3d11::create_defered_context( d );
+                m_photo_models.m_photo_model_horizontal = gpu::create_texture_resource(d, dc, url_horizontal.c_str()).get();
+                execute_command_list(d3d11::finish_command_list(dc));
+            });
+
+            g.run([this, d, c, url_vertical, system]()
+            {
+                auto dc = d3d11::create_defered_context(d);
+                m_photo_models.m_photo_model_vertical = gpu::create_texture_resource(d, dc, url_vertical.c_str()).get();
+                execute_command_list(d3d11::finish_command_list(dc));
+            });
+            
+            g.wait();
+
+        }
+
+        ID3D11ShaderResourceView* get_model_texture(photo_mode mode) const
+        {
+            if (mode == photo_mode::horizontal)
+            {
+                return this->m_photo_models.m_photo_model_horizontal.m_texture_srv.get();
+            }
+            else
+            {
+                return this->m_photo_models.m_photo_model_vertical.m_texture_srv.get();
+            }
+        }
+
+        operator ID3D11Device* () const
+        {
+            return static_cast<ID3D11Device*> (*m_system);
+        }
+
+        operator ID3D11DeviceContext* () const
+        {
+            return static_cast<ID3D11DeviceContext*> (*m_system);
+        }
+
+        ID3D11VertexShader* get_crop_shader_vs(photo_mode mode) const
+        {
+            return m_system->get_crop_shader_vs(mode);
+        }
+
+        ID3D11PixelShader* get_crop_shader_ps() const
+        {
+            return m_system->get_crop_shader_ps();
+        }
+
+        operator ID3D11BlendState*()  const
+        {
+            return static_cast<ID3D11BlendState*> (*m_system);
+        }
+
+        operator ID3D11RasterizerState*() const
+        {
+            return static_cast<ID3D11RasterizerState*> (*m_system);
+        }
+
+        operator ID3D11DepthStencilState*() const
+        {
+            return static_cast<ID3D11DepthStencilState*> (*m_system);
+        }
+
+        operator ID3D11SamplerState*() const
+        {
+            return static_cast<ID3D11SamplerState*> (*m_system);
+        }
+
+        void execute_command_list(ID3D11CommandList* list)
+        {
+            m_system->execute_command_list(list);
+        }
+
+        template <typename r, typename f> r execute_command_list(ID3D11CommandList* list, f f1)
+        {
+            return m_system->execute_command_list<r,f>( list, f1 );
+        }
+
+        //shared
+        private:
+
+        std::shared_ptr<shared_system_context>              m_system;
         //shared read only
-        photo_models                        m_photo_models;
+        photo_models                                        m_photo_models;
     };
 
     template <typename t> inline photo_mode get_mode(const t& v)
@@ -474,7 +542,9 @@ int32_t main( int32_t , char const* [] )
     std::wcout << L"horizontal model: " << url1.get_path_wstring() << std::endl;
     std::wcout << L"vertical   model: " << url2.get_path_wstring() << std::endl;
 
-    auto shared = std::make_shared< composer::shared_compose_context >( d3d11::create_system_context(), url1.get_path_wstring(), url2.get_path_wstring() );
+    auto shared_system = std::make_shared< composer::shared_system_context> (d3d11::create_system_context());
+
+    auto shared = std::make_shared< composer::shared_compose_context >( shared_system, url1.get_path_wstring(), url2.get_path_wstring() );
 
     std::cout << "Initialization " << timer.milliseconds() << " ms" << std::endl;
     timer.reset();
