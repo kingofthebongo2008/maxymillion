@@ -27,8 +27,6 @@
 #include "gpu_texture_resource.h"
 #include "gpu_pool_resources.h"
 
-static std::mutex g_immediate_context_lock;
-
 namespace composer
 {
     enum photo_mode
@@ -98,9 +96,7 @@ namespace composer
 
                 auto list = d3d11::finish_command_list(dc);
                 {
-                    g_immediate_context_lock.lock();
-                    c->ExecuteCommandList(list, false);
-                    g_immediate_context_lock.unlock();
+                    execute_command_list(list);
                 }
 
             });
@@ -113,9 +109,7 @@ namespace composer
 
 
                 {
-                    g_immediate_context_lock.lock();
-                    c->ExecuteCommandList(list, false);
-                    g_immediate_context_lock.unlock();
+                    execute_command_list(list);
                 }
             });
             
@@ -182,10 +176,25 @@ namespace composer
             return m_sampler.get();
         }
 
+        void execute_command_list(ID3D11CommandList* list)
+        {
+            std::lock_guard < std::mutex > g(m_immediate_context_lock);
+            m_system->m_immediate_context->ExecuteCommandList(list, FALSE);
+        }
+
+        template <typename r, typename f> r execute_command_list(ID3D11CommandList* list, f f )
+        {
+            std::lock_guard < std::mutex > g(m_immediate_context_lock);
+            m_system->m_immediate_context->ExecuteCommandList(list, FALSE);
+            return f();
+        }
+
+
         //shared
         private:
 
         std::shared_ptr<d3d11::system_context>              m_system;
+        std::mutex                                          m_immediate_context_lock;
 
         //shared read only
         d3d11::iblendstate_ptr              m_blend_state;
@@ -409,7 +418,7 @@ static std::vector< std::wstring > file_paths2( const std::vector< std::wstring 
     return result_set;
 }
 
-static void convert_texture( const std::shared_ptr<composer::shared_compose_context>& shared, const std::wstring& in, const std::wstring& out)
+static void convert_texture( std::shared_ptr<composer::shared_compose_context>& shared, const std::wstring& in, const std::wstring& out)
 {
     auto dc = d3d11::create_defered_context(*shared);
     auto l = composer::gpu::create_texture_resource( *shared, dc, in.c_str() );
@@ -437,15 +446,14 @@ static void convert_texture( const std::shared_ptr<composer::shared_compose_cont
         auto t0 = ctx->compose_image(t, dc );
 
         d3d11::icommandlist_ptr list = d3d11::finish_command_list(dc);
-
-        g_immediate_context_lock.lock();
         ID3D11DeviceContext* immediate_context = static_cast<ID3D11DeviceContext*> (*ctx);
 
-        immediate_context->ExecuteCommandList(list, false);
-        auto r = composer::gpu::copy_texture_to_cpu( immediate_context , t0);
-
-        g_immediate_context_lock.unlock();
-
+        auto r = shared->execute_command_list< imaging::cpu_texture> (list, [ immediate_context, &t0 ]
+        {
+             return composer::gpu::copy_texture_to_cpu(immediate_context, t0);
+        }
+        );
+        
         std::wstring w(out);
         imaging::write_texture(r, w.c_str() );
     }
@@ -476,7 +484,7 @@ int32_t main( int32_t , char const* [] )
     std::wcout << L"horizontal model: " << url1.get_path_wstring() << std::endl;
     std::wcout << L"vertical   model: " << url2.get_path_wstring() << std::endl;
 
-    auto shared = std::make_shared< composer::shared_compose_context >(d3d11::create_system_context(), url1.get_path_wstring(), url2.get_path_wstring());
+    auto shared = std::make_shared< composer::shared_compose_context >( d3d11::create_system_context(), url1.get_path_wstring(), url2.get_path_wstring() );
 
     std::cout << "Initialization " << timer.milliseconds() << " ms" << std::endl;
     timer.reset();
