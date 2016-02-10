@@ -85,6 +85,12 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\diskdrive.png" />
+    <Resource Include="Images\folder.png" />
+  </ItemGroup>
+
   <ItemGroup>
     <ApplicationDefinition Include="..\src\composer_gui\App.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -94,6 +100,10 @@
     <Compile Include="ComposerJob.cs" />
     <Compile Include="ComposerJobDefinition.cs" />
     <Compile Include="ComposerJobs.cs" />
+    <Compile Include="..\src\composer_gui\Controls\ExplorerErrorEventArgs.cs" />
+    <Compile Include="..\src\composer_gui\Controls\ExplorerTreeView.cs" />
+    <Compile Include="..\src\composer_gui\Converters\FileSystemNodeImageConverter.cs" />
+
     <Page Include="..\src\composer_gui\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

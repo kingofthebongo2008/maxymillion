@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using composer_gui.Controls;
+
 namespace composer_gui
 {
     /// <summary>
@@ -26,5 +28,16 @@ namespace composer_gui
             runtime = new Composer.Bridge.ComposerRuntime();
             InitializeComponent();
         }
+
+        private void explorer_ExplorerError(object sender, ExplorerErrorEventArgs e)
+        {
+            MessageBox.Show(e.Exception.Message);
+        }
+
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            explorer.SelectedPath = txtPath.Text;
+        }
+
     }
 }
