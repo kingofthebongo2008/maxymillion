@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include "targetver.h"
+
 #if defined(WIN32)
 
 /* Include this file instead of including <windows.h> directly. */
@@ -17,10 +19,8 @@
 #endif
 
 
-#include "targetver.h"
 
-#include <stdio.h>
-#include <tchar.h>
+
 
 #endif
 

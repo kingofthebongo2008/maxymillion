@@ -53,16 +53,14 @@ namespace composer
             d3d11::ishaderresourceview_ptr      m_texture_srv;
         };
 
-        concurrency::task<texture_resource> create_texture_resource(ID3D11Device* d, ID3D11DeviceContext*c, const wchar_t* file_name)
+        inline texture_resource create_texture_resource(ID3D11Device* d, ID3D11DeviceContext*c, const wchar_t* file_name)
         {
             std::wstring url(file_name);
 
-            return concurrency::create_task([d, c, url]
-            {
-                auto texture0 = imaging::read_texture(url.c_str());
-                auto gpu_texture = upload_to_gpu(d, c, texture0);
-                return texture_resource(d, gpu_texture);
-            });
+            auto texture0 = imaging::read_texture(url.c_str());
+            auto gpu_texture = upload_to_gpu(d, c, texture0);
+            return texture_resource(d, gpu_texture);
         }
+        
     }
 }

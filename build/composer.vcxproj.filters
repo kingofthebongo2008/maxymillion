@@ -33,6 +33,12 @@
     <Filter Include="source Files\shaders">
       <UniqueIdentifier>{f7a6c6aa-8426-4efe-9c6d-e1199b0c9dd2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source Files\src\composer">
+      <UniqueIdentifier>{79f2c8cc-7600-4571-8444-b43f0c87fc4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source Files\src\composer\shaders">
+      <UniqueIdentifier>{46626304-334c-4d49-b95e-d577ba054877}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="readMe.txt" />
@@ -98,23 +104,32 @@
     <ClInclude Include="..\src\composer\targetver.h">
       <Filter>source Files\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\composer\shader_crop_ps.h">
-      <Filter>source Files\src</Filter>
+    <ClInclude Include="..\src\composer\composer\gpu_helper.h">
+      <Filter>source Files\src\composer</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\composer\gpu_helper.h">
-      <Filter>source Files\src</Filter>
+    <ClInclude Include="..\src\composer\composer\gpu_texture_resource.h">
+      <Filter>source Files\src\composer</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\composer\gpu_texture_resource.h">
-      <Filter>source Files\src</Filter>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_crop_horizontal_vs.h">
+      <Filter>source Files\src\composer\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\composer\shader_crop_vertical_vs.h">
-      <Filter>source Files\src</Filter>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_crop_ps.h">
+      <Filter>source Files\src\composer\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\composer\shader_crop_horizontal_vs.h">
-      <Filter>source Files\src</Filter>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_crop_vertical_vs.h">
+      <Filter>source Files\src\composer\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\composer\gpu_pool_resources.h">
-      <Filter>source Files\src</Filter>
+    <ClInclude Include="..\src\composer\composer\composer.h">
+      <Filter>source Files\src\composer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\composer_compose_context.h">
+      <Filter>source Files\src\composer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\composer_shared_compose_context.h">
+      <Filter>source Files\src\composer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\composer_shared_system_context.h">
+      <Filter>source Files\src\composer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

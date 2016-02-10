@@ -30,12 +30,14 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -43,6 +45,7 @@
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -50,6 +53,7 @@
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
@@ -227,13 +231,16 @@
     <ClInclude Include="..\include\os\windows\wnd_application.h" />
     <ClInclude Include="..\include\util\util_noncopyable.h" />
     <ClInclude Include="..\include\util\util_utf8_conv.h" />
-    <ClInclude Include="..\src\composer\gpu_helper.h" />
-    <ClInclude Include="..\src\composer\gpu_pool_resources.h" />
-    <ClInclude Include="..\src\composer\gpu_texture_resource.h" />
+    <ClInclude Include="..\src\composer\composer\composer.h" />
+    <ClInclude Include="..\src\composer\composer\composer_compose_context.h" />
+    <ClInclude Include="..\src\composer\composer\composer_shared_compose_context.h" />
+    <ClInclude Include="..\src\composer\composer\composer_shared_system_context.h" />
+    <ClInclude Include="..\src\composer\composer\gpu_helper.h" />
+    <ClInclude Include="..\src\composer\composer\gpu_texture_resource.h" />
+    <ClInclude Include="..\src\composer\composer\shaders\shader_crop_horizontal_vs.h" />
+    <ClInclude Include="..\src\composer\composer\shaders\shader_crop_ps.h" />
+    <ClInclude Include="..\src\composer\composer\shaders\shader_crop_vertical_vs.h" />
     <ClInclude Include="..\src\composer\precompiled.h" />
-    <ClInclude Include="..\src\composer\shader_crop_horizontal_vs.h" />
-    <ClInclude Include="..\src\composer\shader_crop_ps.h" />
-    <ClInclude Include="..\src\composer\shader_crop_vertical_vs.h" />
     <ClInclude Include="..\src\composer\targetver.h" />
   </ItemGroup>
   <ItemGroup>
