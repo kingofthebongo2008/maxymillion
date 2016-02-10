@@ -22,6 +22,8 @@ namespace composer_gui
     {
         public MainWindow()
         {
+            ComposerBridge.Imports.composer_runtime_initialize();
+            ComposerBridge.Imports.composer_runtime_shutdown();
             InitializeComponent();
         }
     }
