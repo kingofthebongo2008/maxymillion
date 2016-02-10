@@ -12,3 +12,9 @@ tmp/
 doc/
 media/
 redist/
+build/bin
+build/ipch
+build/x64
+build/obj
+build/x86
+
