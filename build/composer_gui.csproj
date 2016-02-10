@@ -74,13 +74,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -94,6 +91,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ComposerBridge.cs" />
+    <Compile Include="ComposerJob.cs" />
+    <Compile Include="ComposerJobDefinition.cs" />
+    <Compile Include="ComposerJobs.cs" />
     <Page Include="..\src\composer_gui\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -145,6 +145,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="composer_runtime.vcxproj">
+      <Project>{107839ab-1838-4a79-be2a-a10afa3297e1}</Project>
+      <Name>composer_runtime</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

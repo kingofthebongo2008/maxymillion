@@ -4,6 +4,7 @@
 #include "precompiled.h"
 #include <cstdint>
 
+
 namespace composer
 {
     void        initialize();
@@ -12,16 +13,54 @@ namespace composer
     void        free_shared_compose_context(uint32_t handle);
 }
 
-namespace bridge
+namespace Composer
 {
+    namespace Bridge
+    {
+        public ref class ComposerRuntime
+        {
+            public:
+
+            ComposerRuntime()
+            {
+                composer::initialize();
+            }
+
+            ~ComposerRuntime()
+            {
+                composer::shutdown();
+            }
+        };
+
+        public ref class ComposeContext
+        {
+            private:
+
+            ComposerRuntime^ m_runtime;
+
+            public:
+
+            ComposeContext(ComposerRuntime^ runtime, System::String^ model0, System::String^ model1 ): m_runtime(runtime)
+            {
+
+            }
+
+            void ComposeImages(System::String^ s)
+            {
+
+            }
+        };
+    }
+    
+    /*
     extern "C" __declspec(dllexport) void composer_runtime_initialize()
     {
-        composer::initialize();
+        
     }
 
     extern "C" __declspec(dllexport) void composer_runtime_shutdown()
     {
-        composer::shutdown();
+
     }
 
     extern "C" __declspec(dllexport) uint32_t composer_runtime_create_shared_compose_context()
@@ -33,6 +72,7 @@ namespace bridge
     {
 
     }
+    */
 }
 
 

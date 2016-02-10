@@ -95,14 +95,18 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;WIN32;_DEBUG;_WINDOWS;_USRDLL;COMPOSER_RUNTIME_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>../extern;../include;$(IntDir)shaders;../src/composer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>dxguid.lib;dxgi.lib;d3d9.lib;d3d11.lib;d2d1.lib;dwrite.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AssemblyDebug>true</AssemblyDebug>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
@@ -111,9 +115,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_DEBUG;_WINDOWS;_USRDLL;COMPOSER_RUNTIME_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>../extern;../include;$(IntDir)shaders;../src/composer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -129,9 +137,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;_USRDLL;COMPOSER_RUNTIME_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>../extern;../include;$(IntDir)shaders;../src/composer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -149,9 +158,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;NDEBUG;_WINDOWS;_USRDLL;COMPOSER_RUNTIME_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>../extern;../include;$(IntDir)shaders;../src/composer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -172,7 +182,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\composer_runtime\composer_bridge.cpp" />
-    <ClCompile Include="..\src\composer_runtime\composer_runtime.cpp" />
+    <ClCompile Include="..\src\composer_runtime\composer_runtime.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='release|Win32'">true</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">true</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='release|x64'">true</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='debug|x64'">true</CompileAsManaged>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='release|Win32'">false</ExceptionHandling>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">false</ExceptionHandling>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='release|x64'">false</ExceptionHandling>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='debug|x64'">false</ExceptionHandling>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\src\composer_runtime\dllmain.cpp" />
     <ClCompile Include="..\src\composer_runtime\precompiled.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='release|Win32'">Create</PrecompiledHeader>

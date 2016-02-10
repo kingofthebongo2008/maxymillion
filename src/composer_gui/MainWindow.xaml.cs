@@ -20,10 +20,10 @@ namespace composer_gui
     /// </summary>
     public partial class MainWindow : Window
     {
+        Composer.Bridge.ComposerRuntime runtime;
         public MainWindow()
         {
-            ComposerBridge.Imports.composer_runtime_initialize();
-            ComposerBridge.Imports.composer_runtime_shutdown();
+            runtime = new Composer.Bridge.ComposerRuntime();
             InitializeComponent();
         }
     }
