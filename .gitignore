@@ -17,4 +17,7 @@ build/ipch
 build/x64
 build/obj
 build/x86
+src/composer_gui/obj
+
+
 

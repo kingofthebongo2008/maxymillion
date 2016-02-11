@@ -23,9 +23,12 @@ namespace composer_gui
     public partial class MainWindow : Window
     {
         Composer.Bridge.ComposerRuntime runtime;
+
         public MainWindow()
         {
-            runtime = new Composer.Bridge.ComposerRuntime();
+            App a = (composer_gui.App)App.Current;
+            runtime = a.Runtime;
+
             InitializeComponent();
         }
 
@@ -36,7 +39,7 @@ namespace composer_gui
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            explorer.SelectedPath = txtPath.Text;
+            inputDirectory.SelectedPath = txtPathInput.Text;
         }
 
     }

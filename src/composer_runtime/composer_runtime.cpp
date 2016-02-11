@@ -17,16 +17,25 @@ namespace Composer
 {
     namespace Bridge
     {
-        public ref class ComposerRuntime
+        public ref class ComposerRuntime : public System::IDisposable
         {
+            bool m_isDisposed;
             public:
 
-            ComposerRuntime()
+            ComposerRuntime() : m_isDisposed(false)
             {
                 composer::initialize();
             }
 
-            ~ComposerRuntime()
+            ~ComposerRuntime() {
+                if (m_isDisposed)
+                    return;
+
+                this->!ComposerRuntime();
+                m_isDisposed = true;
+            }
+
+            !ComposerRuntime()
             {
                 composer::shutdown();
             }

@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Controls="clr-namespace:composer_gui.Controls" 
         xmlns:Converters="clr-namespace:composer_gui.Converters" 
-        Title="ExplorerTreeView demo" Height="350" Width="525">
+        Title="ExplorerTreeView demo" Height="600" Width="800">
+    
     <Window.Resources>
         <Converters:FileSystemNodeImageConverter x:Key="fileSystemNodeImageConverter"
                                                  DriveImage="Images/diskdrive.png"
@@ -24,8 +25,10 @@
         </Style>
     </Window.Resources>
 
-    <Grid Margin="6">
+    <Grid Margin="6" Width="504">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -35,20 +38,47 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding SelectedPath, ElementName=explorer, Mode=OneWay}"
-                     x:Name="txtPath"/>
-            <Button Grid.Column="1" 
-                    Margin="4,0,0,0"
-                    Content="Update"
-                    Click="btnUpdate_Click"/>
+            <TextBox Text="{Binding SelectedPath, ElementName=inputDirectory, Mode=OneWay}" x:Name="txtPathInput"/>
+            <Button Grid.Column="1" Margin="4,0,0,0" Content="Update" Click="btnUpdate_Click"/>
         </Grid>
-        <Controls:ExplorerTreeView x:Name="explorer"
-                                   Grid.Row="1"
-                                   ExplorerError="explorer_ExplorerError"/>
 
-        <StackPanel Grid.Row="2" Margin="0,4,0,0">
-            <CheckBox IsChecked="{Binding UnloadItemsOnCollapse, ElementName=explorer}"
-                      Content="Unload subfolders on collapse"/>
+        <Grid Grid.Row="1" Margin="0,0,0,4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Content="Input Directory"/>
+            <Controls:ExplorerTreeView Grid.Row="1" x:Name="inputDirectory" ExplorerError="explorer_ExplorerError"/>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="0,0,0,4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding SelectedPath, ElementName=outputDirectory, Mode=OneWay}" x:Name="txtPathInputOutput"/>
+            <Button Grid.Column="1" Margin="4,0,0,0" Content="Update" Click="btnUpdate_Click"/>
+        </Grid>
+
+        <Grid Grid.Row="3" Margin="0,0,0,4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Content="Output Directory"/>
+            <Controls:ExplorerTreeView Grid.Row="1" x:Name="outputDirectory" ExplorerError="explorer_ExplorerError"/>
+        </Grid>
+
+        <StackPanel Grid.Row="4" Margin="0,4,0,0">
+            <CheckBox IsChecked="{Binding UnloadItemsOnCollapse, ElementName=outputDirectory}" Content="Unload subfolders on collapse"/>
         </StackPanel>
     </Grid>
 </Window>
