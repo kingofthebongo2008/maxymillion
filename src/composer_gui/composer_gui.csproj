@@ -32,16 +32,17 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\bin\x64\debug\</OutputPath>
+    <OutputPath>..\..\bin\x64\debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'release|x64' ">
-    <OutputPath>..\bin\x64\release\</OutputPath>
+    <OutputPath>..\..\bin\x64\release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -53,7 +54,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\bin\Win32\debug\</OutputPath>
+    <OutputPath>..\..\bin\Win32\debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -63,7 +64,7 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'release|x86' ">
-    <OutputPath>..\bin\Win32\release\</OutputPath>
+    <OutputPath>..\..\bin\Win32\release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -85,14 +86,12 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
   </ItemGroup>
-
   <ItemGroup>
     <Resource Include="Images\diskdrive.png" />
     <Resource Include="Images\folder.png" />
   </ItemGroup>
-
   <ItemGroup>
-    <ApplicationDefinition Include="..\src\composer_gui\App.xaml">
+    <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
@@ -100,49 +99,48 @@
     <Compile Include="ComposerJob.cs" />
     <Compile Include="ComposerJobDefinition.cs" />
     <Compile Include="ComposerJobs.cs" />
-    <Compile Include="..\src\composer_gui\Controls\ExplorerErrorEventArgs.cs" />
-    <Compile Include="..\src\composer_gui\Controls\ExplorerTreeView.cs" />
-    <Compile Include="..\src\composer_gui\Converters\FileSystemNodeImageConverter.cs" />
-
-    <Page Include="..\src\composer_gui\MainWindow.xaml">
+    <Compile Include="Controls\ExplorerErrorEventArgs.cs" />
+    <Compile Include="Controls\ExplorerTreeView.cs" />
+    <Compile Include="Converters\FileSystemNodeImageConverter.cs" />
+    <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="..\src\composer_gui\App.xaml.cs">
+    <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="..\src\composer_gui\MainWindow.xaml.cs">
+    <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\src\composer_gui\Properties\AssemblyInfo.cs">
+    <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="..\src\composer_gui\Properties\Resources.Designer.cs">
+    <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\src\composer_gui\Properties\Settings.Designer.cs">
+    <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="..\src\composer_gui\Properties\Resources.resx">
+    <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="..\src\composer_gui\Properties\Settings.settings">
+    <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <AppDesigner Include="..\src\composer_gui\Properties\" />
+    <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\src\composer_gui\App.config" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
@@ -157,7 +155,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="composer_runtime.vcxproj">
+    <ProjectReference Include="..\..\build\composer_runtime.vcxproj">
       <Project>{107839ab-1838-4a79-be2a-a10afa3297e1}</Project>
       <Name>composer_runtime</Name>
     </ProjectReference>
