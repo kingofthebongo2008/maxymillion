@@ -100,6 +100,7 @@
     <Compile Include="ComposerJobDefinition.cs" />
     <Compile Include="ComposerJobs.cs" />
     <Compile Include="Controls\ExplorerErrorEventArgs.cs" />
+    <Compile Include="Controls\ExplorerSelectedPathChangedEventArgs.cs" />
     <Compile Include="Controls\ExplorerTreeView.cs" />
     <Compile Include="Converters\FileSystemNodeImageConverter.cs" />
     <Page Include="MainWindow.xaml">

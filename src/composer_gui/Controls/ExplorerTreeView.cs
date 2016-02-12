@@ -74,7 +74,8 @@ namespace composer_gui.Controls
         /// <summary>
         /// This event is raised if error occurs while creating file system tree.
         /// </summary>
-        public event EventHandler<ExplorerErrorEventArgs> ExplorerError;
+        public event EventHandler<ExplorerErrorEventArgs>               ExplorerError;
+        public event EventHandler<ExplorerSelectedPathChangedEventArgs> SelectedPathChanged;
 
         /// <summary>
         /// Invocator for <see cref="ExplorerError"/> event.
@@ -83,6 +84,12 @@ namespace composer_gui.Controls
         private void InvokeExplorerError(ExplorerErrorEventArgs e)
         {
             EventHandler<ExplorerErrorEventArgs> handler = ExplorerError;
+            if (handler != null) handler(this, e);
+        }
+
+        private void InvokeSelectedPathChanged( ExplorerSelectedPathChangedEventArgs e )
+        {
+            var handler = SelectedPathChanged;
             if (handler != null) handler(this, e);
         }
 
@@ -104,6 +111,7 @@ namespace composer_gui.Controls
         /// <param name="e"></param>
         private void OnSelectedItemChanged(object sender, RoutedEventArgs e)
         {
+           
             SelectedPath = GetSelectedPath();
         }
 
@@ -189,6 +197,7 @@ namespace composer_gui.Controls
                 {
                     SetSelectedPath(newValue);
                 }
+                InvokeSelectedPathChanged(new ExplorerSelectedPathChangedEventArgs(newValue));
             }
         }
 

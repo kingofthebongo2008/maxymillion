@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Controls="clr-namespace:composer_gui.Controls" 
         xmlns:Converters="clr-namespace:composer_gui.Converters" 
-        Title="Composer GUI" Height="600" Width="800" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
+        Title="Composer GUI" Width="800" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ScrollViewer.CanContentScroll="True" >
 
     <Window.Resources>
         <Converters:FileSystemNodeImageConverter x:Key="fileSystemNodeImageConverter"
@@ -31,20 +31,20 @@
         <Grid>
             <StackPanel>
                 <Label Grid.Row="0" Content="Input Directory"/>
-                <TextBox Grid.Row="1" Text="{Binding SelectedPath, ElementName=inputDirectory, Mode=OneWay}" x:Name="txtPathInput" Margin="0,4"/>
-                <Controls:ExplorerTreeView Grid.Row="0" x:Name="inputDirectory" ExplorerError="explorer_ExplorerError" Margin="0,4" Height="120"/>
-                
-                <Label Grid.Row="0" Content="Input Files" Margin="0,4"/>
-                <ListBox Grid.Row="1" x:Name="lbPathInputFiles" Margin="0,4" Height="180"/>
+                <TextBox Grid.Row="1" Text="{Binding SelectedPath, ElementName=m_inputDirectory, Mode=OneWay}" x:Name="m_inputPath" Margin="0,4"/>
+                <Controls:ExplorerTreeView Grid.Row="0" x:Name="m_inputDirectory" ExplorerError="explorer_ExplorerError" Margin="0,4" Height="120" SelectedPathChanged="inputDirectory_SelectedPathChanged" Loaded="inputDirectoryLoaded"/>
 
-            </StackPanel>            
+                <Label Grid.Row="0" Content="Input Files" Margin="0,4"/>
+                <ListBox Grid.Row="1" x:Name="m_InputFiles" Margin="0,4" Height="180"/>
+                <Button Content="Select All" x:Name="m_SelectAll" Click="m_SelectAll_Click"/>
+            </StackPanel>
         </Grid>
 
         <Grid>
             <StackPanel>
-            <Label Grid.Row="0" Content="Output Directory" Margin="0,4"/>
-            <TextBox Grid.Row="1" Text="{Binding SelectedPath, ElementName=outputDirectory, Mode=OneWay}" x:Name="txtPathInputOutput" Margin="0,4"/>
-            <Controls:ExplorerTreeView Grid.Row="0" x:Name="outputDirectory" ExplorerError="explorer_ExplorerError" Margin="0,4" Height="120"/>
+                <Label Grid.Row="0" Content="Output Directory" Margin="0,4"/>
+                <TextBox Grid.Row="1" Text="{Binding SelectedPath, ElementName=outputDirectory, Mode=OneWay}" x:Name="m_outputPath" Margin="0,4"/>
+                <Controls:ExplorerTreeView Grid.Row="0" x:Name="outputDirectory" ExplorerError="explorer_ExplorerError" Margin="0,4" Height="120"/>
             </StackPanel>
         </Grid>
 
@@ -52,22 +52,23 @@
         <Grid>
             <StackPanel>
                 <Label Grid.Row="0" Content="Horizontal Frame" Margin="0,4"/>
-                <TextBox Grid.Row="1" Text="{Binding SelectedPath, ElementName=outputDirectory, Mode=OneWay}" x:Name="txtPathHorizontalFrame" Margin="0,4"/>
-                <Button Content="..." Width="64" />
-                
+                <TextBox Grid.Row="1" Text="{Binding SelectedPath, ElementName=outputDirectory, Mode=OneWay}" x:Name="m_horizontalFrame" Margin="0,4"/>
+                <Button Content="..." Width="64" x:Name="m_selectHorizontalFrame" Click="m_selectHorizontalFrame_Click"/>
+
                 <Label Grid.Row="0" Content="Vertical Frame" Margin="0,4"/>
-                <TextBox Grid.Row="1" Text="{Binding SelectedPath, ElementName=outputDirectory, Mode=OneWay}" x:Name="txtPathVerticalFrame" Margin="0,4"/>
-                <Button Content="..." Width="64" />
-                
+                <TextBox Grid.Row="1" Text="{Binding SelectedPath, ElementName=outputDirectory, Mode=OneWay}" x:Name="m_verticalFrame" Margin="0,4"/>
+                <Button Content="..." Width="64" x:Name="m_selectVerticalFrame" Click="m_selectVerticalFrame_Click"/>
+
             </StackPanel>
         </Grid>
 
         <Grid>
             <StackPanel>
-                <ProgressBar Margin="0,4" Height="24" />
-                <Button Content="Process" />
+                <ProgressBar Margin="0,4" Height="24" x:Name="m_Progress"/>
+                <Button Content="Process" x:Name="m_Process" Click="m_Process_Click"/>
             </StackPanel>
         </Grid>
+        <StackPanel/>
 
     </StackPanel>
 
