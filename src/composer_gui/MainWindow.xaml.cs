@@ -22,12 +22,12 @@ namespace composer_gui
     /// </summary>
     public partial class MainWindow : Window
     {
-        Composer.Bridge.ComposerRuntime runtime;
+        Composer.Bridge.ComposerRuntime m_Runtime;
 
         public MainWindow()
         {
             App a = (composer_gui.App)App.Current;
-            runtime = a.Runtime;
+            m_Runtime = a.Runtime;
 
             InitializeComponent();
         }

@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Controls="clr-namespace:composer_gui.Controls" 
         xmlns:Converters="clr-namespace:composer_gui.Converters" 
-        Title="ExplorerTreeView demo" Height="600" Width="800">
-    
+        Title="Composer GUI" Height="600" Width="800" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
+
     <Window.Resources>
         <Converters:FileSystemNodeImageConverter x:Key="fileSystemNodeImageConverter"
                                                  DriveImage="Images/diskdrive.png"
@@ -25,60 +25,50 @@
         </Style>
     </Window.Resources>
 
-    <Grid Margin="6" Width="504">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="0,0,0,4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding SelectedPath, ElementName=inputDirectory, Mode=OneWay}" x:Name="txtPathInput"/>
-            <Button Grid.Column="1" Margin="4,0,0,0" Content="Update" Click="btnUpdate_Click"/>
+
+    <StackPanel Margin="6" Width="504">
+
+        <Grid>
+            <StackPanel>
+                <Label Grid.Row="0" Content="Input Directory"/>
+                <TextBox Grid.Row="1" Text="{Binding SelectedPath, ElementName=inputDirectory, Mode=OneWay}" x:Name="txtPathInput" Margin="0,4"/>
+                <Controls:ExplorerTreeView Grid.Row="0" x:Name="inputDirectory" ExplorerError="explorer_ExplorerError" Margin="0,4" Height="120"/>
+                
+                <Label Grid.Row="0" Content="Input Files" Margin="0,4"/>
+                <ListBox Grid.Row="1" x:Name="lbPathInputFiles" Margin="0,4" Height="180"/>
+
+            </StackPanel>            
         </Grid>
 
-        <Grid Grid.Row="1" Margin="0,0,0,4">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Label Grid.Row="0" Content="Input Directory"/>
-            <Controls:ExplorerTreeView Grid.Row="1" x:Name="inputDirectory" ExplorerError="explorer_ExplorerError"/>
+        <Grid>
+            <StackPanel>
+            <Label Grid.Row="0" Content="Output Directory" Margin="0,4"/>
+            <TextBox Grid.Row="1" Text="{Binding SelectedPath, ElementName=outputDirectory, Mode=OneWay}" x:Name="txtPathInputOutput" Margin="0,4"/>
+            <Controls:ExplorerTreeView Grid.Row="0" x:Name="outputDirectory" ExplorerError="explorer_ExplorerError" Margin="0,4" Height="120"/>
+            </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="2" Margin="0,0,0,4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding SelectedPath, ElementName=outputDirectory, Mode=OneWay}" x:Name="txtPathInputOutput"/>
-            <Button Grid.Column="1" Margin="4,0,0,0" Content="Update" Click="btnUpdate_Click"/>
+
+        <Grid>
+            <StackPanel>
+                <Label Grid.Row="0" Content="Horizontal Frame" Margin="0,4"/>
+                <TextBox Grid.Row="1" Text="{Binding SelectedPath, ElementName=outputDirectory, Mode=OneWay}" x:Name="txtPathHorizontalFrame" Margin="0,4"/>
+                <Button Content="..." Width="64" />
+                
+                <Label Grid.Row="0" Content="Vertical Frame" Margin="0,4"/>
+                <TextBox Grid.Row="1" Text="{Binding SelectedPath, ElementName=outputDirectory, Mode=OneWay}" x:Name="txtPathVerticalFrame" Margin="0,4"/>
+                <Button Content="..." Width="64" />
+                
+            </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="3" Margin="0,0,0,4">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Label Grid.Row="0" Content="Output Directory"/>
-            <Controls:ExplorerTreeView Grid.Row="1" x:Name="outputDirectory" ExplorerError="explorer_ExplorerError"/>
+        <Grid>
+            <StackPanel>
+                <ProgressBar Margin="0,4" Height="24" />
+                <Button Content="Process" />
+            </StackPanel>
         </Grid>
 
-        <StackPanel Grid.Row="4" Margin="0,4,0,0">
-            <CheckBox IsChecked="{Binding UnloadItemsOnCollapse, ElementName=outputDirectory}" Content="Unload subfolders on collapse"/>
-        </StackPanel>
-    </Grid>
+    </StackPanel>
+
 </Window>
