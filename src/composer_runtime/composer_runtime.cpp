@@ -119,9 +119,7 @@ namespace Composer
 
                 std::auto_ptr<SharedComposeContext> ctx(new SharedComposeContext(m_runtime->Get(), marshal_as<std::wstring>(m0), marshal_as<std::wstring>(m1)));
 
-
-                //form outupt
-
+                ctx->ComposeImages(in, out);
             }
         };
     }

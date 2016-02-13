@@ -71,7 +71,16 @@ namespace composer_gui
 
         private string getOutputDirectory()
         {
-            return m_outputPath.Text;
+            var s = m_outputPath.Text;
+            if ( s[s.Length - 1 ] != '\\' )
+            {
+                return s + '\\';
+            }
+            else
+            {
+                return s;
+            }
+
         }
 
         private string getHorizontalFrame()
@@ -92,7 +101,25 @@ namespace composer_gui
                 var o = getOutputDirectory();
                 var h = getHorizontalFrame();
                 var v = getVerticalFrame();
-                await Task.Run(() => { MessageBox.Show("Not implemented"); });
+                await Task.Run(() => {
+
+
+                    m_Progress.Dispatcher.Invoke(
+                        () =>
+                        {
+                            m_Progress.IsIndeterminate = true;
+                        });
+
+                    var context = new Composer.Bridge.ComposeContext(m_Runtime, h, v);
+
+                    context.ComposeImages(i, o);
+
+                    m_Progress.Dispatcher.Invoke(
+                        () =>
+                        {
+                            m_Progress.IsIndeterminate = false;
+                        });
+                });
             }
 
             catch ( Exception ex)
@@ -103,7 +130,7 @@ namespace composer_gui
 
         private void m_SelectAll_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Not implemented");
+            m_InputFiles.SelectAll();
         }
 
         private void inputDirectory_SelectedPathChanged(object sender, ExplorerSelectedPathChangedEventArgs e)
