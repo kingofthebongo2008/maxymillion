@@ -89,12 +89,12 @@ namespace composer_gui
 
         private string getHorizontalFrame()
         {
-            return m_FramesHorizontal.SelectedItem.ToString();
+            return m_FramesHorizontal.SelectedItems[0].ToString();
         }
 
         private string getVerticalFrame()
         {
-            return m_FramesHorizontal.SelectedItem.ToString();
+            return m_FramesHorizontal.SelectedItems[1].ToString();
         }
 
         private async void m_Process_Click(object sender, RoutedEventArgs e)
