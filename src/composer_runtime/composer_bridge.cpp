@@ -13,33 +13,8 @@
 
 #include <fs/fs_media.h>
 
-
 namespace composer
 {
-    struct initializer
-    {
-        //os::windows::com_initializer                      m_com;
-        std::shared_ptr<composer::shared_system_context>  m_shared_system_context;
-
-        initializer()
-        {
-            m_shared_system_context = std::make_shared< composer::shared_system_context>(d3d11::create_system_context());
-        }
-
-    };
-
-    static std::shared_ptr< initializer > g_initializer;
-
-    void initialize()
-    {
-        g_initializer = std::make_shared<initializer>();
-    }
-
-    void shutdown()
-    {
-        g_initializer.reset();
-    }
-
     static std::vector< std::wstring > file_paths(const wchar_t* file_path)
     {
         namespace fs = std::experimental::filesystem;

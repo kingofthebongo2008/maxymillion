@@ -61,9 +61,44 @@ namespace composer_gui
             MessageBox.Show(e.Exception.Message);
         }
 
-        private void m_Process_Click(object sender, RoutedEventArgs e)
+        private List<string> getInputFiles()
         {
-            MessageBox.Show("Not implemented");
+            var r = new List<string>();
+            var s = m_InputFiles.SelectedItems;
+            r.AddRange(s.OfType<string>());
+            return r;
+        }
+
+        private string getOutputDirectory()
+        {
+            return m_outputPath.Text;
+        }
+
+        private string getHorizontalFrame()
+        {
+            return m_FramesHorizontal.SelectedItem.ToString();
+        }
+
+        private string getVerticalFrame()
+        {
+            return m_FramesVertical.SelectedItem.ToString();
+        }
+
+        private async void m_Process_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var i = getInputFiles();
+                var o = getOutputDirectory();
+                var h = getHorizontalFrame();
+                var v = getVerticalFrame();
+                await Task.Run(() => { MessageBox.Show("Not implemented"); });
+            }
+
+            catch ( Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
         private void m_SelectAll_Click(object sender, RoutedEventArgs e)

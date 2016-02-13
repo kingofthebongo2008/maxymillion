@@ -175,6 +175,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\composer_runtime\composer_bridge.h" />
+    <ClInclude Include="..\src\composer_runtime\composer_bridge_shared_compose_context.h" />
+    <ClInclude Include="..\src\composer_runtime\composer_bridge_shared_system_context.h" />
+    <ClInclude Include="..\src\composer_runtime\composer_embedded.h" />
     <ClInclude Include="..\src\composer_runtime\precompiled.h" />
     <ClInclude Include="..\src\composer_runtime\targetver.h" />
     <ClInclude Include="stdafx.h" />
@@ -182,6 +186,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\composer_runtime\composer_bridge.cpp" />
+    <ClCompile Include="..\src\composer_runtime\composer_bridge_shared_compose_context.cpp" />
+    <ClCompile Include="..\src\composer_runtime\composer_bridge_shared_system_context.cpp" />
     <ClCompile Include="..\src\composer_runtime\composer_runtime.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='release|Win32'">true</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">true</CompileAsManaged>

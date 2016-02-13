@@ -33,6 +33,18 @@
     <ClInclude Include="..\src\composer_runtime\targetver.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\composer_runtime\composer_embedded.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer_runtime\composer_bridge.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer_runtime\composer_bridge_shared_system_context.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer_runtime\composer_bridge_shared_compose_context.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\composer_runtime\composer_runtime.cpp">
@@ -45,6 +57,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\composer_runtime\composer_bridge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\composer_runtime\composer_bridge_shared_system_context.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\composer_runtime\composer_bridge_shared_compose_context.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

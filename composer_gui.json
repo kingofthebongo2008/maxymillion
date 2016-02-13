@@ -1,1 +1,5 @@
-{"InputDirectory":"c:\\","OutputDirectory":"c:\\","FramesDirectory":"c:\\"}
+{
+ "InputDirectory" 	:"G:\\freelance_private\\maxymillion\\media\\in",
+ "OutputDirectory"	:"G:\\freelance_private\\maxymillion\\media\\out",
+ "FramesDirectory"	:"G:\\freelance_private\\maxymillion\\media\\model"
+}

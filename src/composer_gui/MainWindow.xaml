@@ -36,7 +36,7 @@
                         <Controls:ExplorerTreeView Grid.Row="0" x:Name="m_inputDirectory" ExplorerError="explorer_ExplorerError" Margin="0,4" Height="120" SelectedPathChanged="inputDirectory_SelectedPathChanged" Loaded="inputDirectoryLoaded" />
 
                         <Label Grid.Row="0" Content="Input Files" Margin="0,4"/>
-                        <ListBox Grid.Row="1" x:Name="m_InputFiles" Margin="0,4" Height="180"/>
+                        <ListBox Grid.Row="1" x:Name="m_InputFiles" Margin="0,4" Height="180" SelectionMode="Extended"/>
                         <Button Content="Select All" x:Name="m_SelectAll" Click="m_SelectAll_Click"/>
                     </StackPanel>
                 </Grid>
