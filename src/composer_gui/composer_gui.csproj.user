@@ -13,18 +13,18 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'release|x64'">
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
-    <StartWorkingDirectory>..\bin\x64\release\</StartWorkingDirectory>
+    <StartWorkingDirectory>..\..\..</StartWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'debug|x64'">
-    <StartWorkingDirectory>..\bin\x64\debug\</StartWorkingDirectory>
+    <StartWorkingDirectory>..\..\..</StartWorkingDirectory>
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'debug|x86'">
-    <StartWorkingDirectory>..</StartWorkingDirectory>
+    <StartWorkingDirectory>..\..\..</StartWorkingDirectory>
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'release|x86'">
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
-    <StartWorkingDirectory>..</StartWorkingDirectory>
+    <StartWorkingDirectory>..\..\..</StartWorkingDirectory>
   </PropertyGroup>
 </Project>

@@ -5,7 +5,7 @@ using System.IO;
 
 namespace ComposerBridge
 {
-    class ComposerJobDefinition
+    public class ComposerJobDefinition
     {
         public ComposerJobDefinition()
         {
@@ -19,9 +19,9 @@ namespace ComposerBridge
             m_framesDirectory = framesDirectory;
         }
 
-        public string InputDirectory {  get { return m_inputDirectory;  } }
-        public string OutputDirectory { get { return m_outputDirectory; } }
-        public string FramesDirectory { get { return m_framesDirectory; } }
+        public string InputDirectory {  get { return m_inputDirectory;  } set { m_inputDirectory = value; } }
+        public string OutputDirectory { get { return m_outputDirectory; } set { m_outputDirectory = value; } }
+        public string FramesDirectory { get { return m_framesDirectory; } set { m_framesDirectory = value; } }
 
         private string m_inputDirectory;
         private string m_outputDirectory;
@@ -33,7 +33,6 @@ namespace ComposerBridge
     {
         public static ComposerJobDefinition CreateFromStream( Stream s )
         {
-            var r = new StreamReader(s);
             var d = new ComposerJobDefinition();
 
             var serializer = new JsonSerializer();
@@ -41,7 +40,7 @@ namespace ComposerBridge
             serializer.NullValueHandling = NullValueHandling.Ignore;
 
             using (var sr = new StreamReader(s))
-            using (JsonReader reader = new JsonTextReader(sr))
+            using (var reader = new JsonTextReader(sr))
             {
                 return  serializer.Deserialize<ComposerJobDefinition>(reader);
             }
@@ -60,7 +59,23 @@ namespace ComposerBridge
                 return r;
             }
         }
+
+        public static void WriteToStream (Stream s, ComposerJobDefinition o)
+        {
+            var serializer = new JsonSerializer();
+            serializer.Converters.Add(new JavaScriptDateTimeConverter());
+            serializer.NullValueHandling = NullValueHandling.Ignore;
+
+            using (var sr = new StreamWriter(s))
+            using (var writer = new JsonTextWriter(sr))
+            {
+                serializer.Serialize(writer, o);
+            }
+        }
+
+        public static void WriteToFile(string path, ComposerJobDefinition d)
+        {
+            WriteToStream(new FileStream(path, FileMode.OpenOrCreate), d);
+        }
     }
-
-
 }

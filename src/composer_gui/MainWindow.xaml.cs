@@ -27,15 +27,16 @@ namespace composer_gui
     {
         Composer.Bridge.ComposerRuntime m_Runtime;
 
-        List<string> m_Files        = new List<string>();
-        List<string> m_FrameFiles   = new List<string>();
+        List<string> m_Files = new List<string>();
+        List<string> m_FrameFiles = new List<string>();
 
-        ComposerJobDefinition   m_definition;
+        ComposerJobDefinition m_definition;
 
-        public MainWindow()
+        public MainWindow( )
         {
             App a = (composer_gui.App)App.Current;
             m_Runtime = a.Runtime;
+            m_definition = a.Definition;
 
             InitializeComponent();
 
@@ -43,11 +44,12 @@ namespace composer_gui
             m_FramesHorizontal.ItemsSource = m_FrameFiles;
             m_FramesVertical.ItemsSource = m_FrameFiles;
 
-            m_definition = ComposerJobDefinitionFactory.CreateFromFile("composer_gui.json");
         }
 
-        IEnumerable<string> Files {
-            get { return m_Files; } }
+        IEnumerable<string> Files
+        {
+            get { return m_Files; }
+        }
 
         IEnumerable<string> FrameFiles
         {
@@ -80,7 +82,7 @@ namespace composer_gui
 
                 m_Files.AddRange(txtFiles);
             }
-            catch (Exception )
+            catch (Exception)
             {
 
             }
@@ -88,15 +90,42 @@ namespace composer_gui
             this.m_InputFiles.Items.Refresh();
         }
 
+        private void frameDirectory_SelectedPathChanged(object sender, ExplorerSelectedPathChangedEventArgs e)
+        {
+            m_FrameFiles.Clear();
+
+            try
+            {
+                var sourceDirectory = e.SelectedPath;
+                var txtFiles = Directory.EnumerateFiles(sourceDirectory, "*.tif", SearchOption.TopDirectoryOnly);
+
+                m_FrameFiles.AddRange(txtFiles);
+            }
+
+            catch (Exception)
+            {
+
+            }
+
+            this.m_FramesHorizontal.Items.Refresh();
+            this.m_FramesVertical.Items.Refresh();
+        }
+
         private void inputDirectoryLoaded(object sender, RoutedEventArgs e)
         {
-
             //todo: check if path exists
-            m_inputDirectory.SelectedPath   = m_definition.InputDirectory;
-            m_outputDirectory.SelectedPath  = m_definition.OutputDirectory;
-            m_frameDirectory.SelectedPath   = m_definition.FramesDirectory;
+            m_inputDirectory.SelectedPath = m_definition.InputDirectory;
 
+        }
 
+        private void outputDirectoryLoaded(object sender, RoutedEventArgs e)
+        {
+            m_outputDirectory.SelectedPath = m_definition.OutputDirectory;
+        }
+
+        private void frameDirectoryLoaded(object sender, RoutedEventArgs e)
+        {
+            m_frameDirectory.SelectedPath = m_definition.FramesDirectory;
         }
     }
 }

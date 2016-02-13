@@ -33,7 +33,7 @@
                     <StackPanel>
                         <Label Grid.Row="0" Content="Input Directory" />
                         <TextBox Grid.Row="1" Text="{Binding SelectedPath, ElementName=m_inputDirectory, Mode=OneWay}" x:Name="m_inputPath" Margin="0,4"/>
-                        <Controls:ExplorerTreeView Grid.Row="0" x:Name="m_inputDirectory" ExplorerError="explorer_ExplorerError" Margin="0,4" Height="120" SelectedPathChanged="inputDirectory_SelectedPathChanged" Loaded="inputDirectoryLoaded" ScrollViewer.CanContentScroll="True" />
+                        <Controls:ExplorerTreeView Grid.Row="0" x:Name="m_inputDirectory" ExplorerError="explorer_ExplorerError" Margin="0,4" Height="120" SelectedPathChanged="inputDirectory_SelectedPathChanged" Loaded="inputDirectoryLoaded" />
 
                         <Label Grid.Row="0" Content="Input Files" Margin="0,4"/>
                         <ListBox Grid.Row="1" x:Name="m_InputFiles" Margin="0,4" Height="180"/>
@@ -47,7 +47,7 @@
                     <StackPanel>
                         <Label Grid.Row="0" Content="Output Directory" Margin="0,4"/>
                         <TextBox Grid.Row="1" Text="{Binding SelectedPath, ElementName=m_outputDirectory, Mode=OneWay}" x:Name="m_outputPath" Margin="0,4"/>
-                        <Controls:ExplorerTreeView Grid.Row="0" x:Name="m_outputDirectory" ExplorerError="explorer_ExplorerError" Margin="0,4" Height="120"/>
+                        <Controls:ExplorerTreeView Grid.Row="0" x:Name="m_outputDirectory" ExplorerError="explorer_ExplorerError" Loaded="outputDirectoryLoaded"  Margin="0,4" Height="120"/>
                     </StackPanel>
                 </Grid>
             </GroupBox>
@@ -58,8 +58,8 @@
                     <StackPanel>
                         <Label Grid.Row="0" Content="Frame Directory" Margin="0,4"/>
                         <TextBox Grid.Row="1" Text="{Binding SelectedPath, ElementName=m_frameDirectory, Mode=OneWay}" x:Name="m_framePath" Margin="0,4"/>
-                        <Controls:ExplorerTreeView Grid.Row="0" x:Name="m_frameDirectory" ExplorerError="explorer_ExplorerError" Margin="0,4" Height="120"/>
-
+                        <Controls:ExplorerTreeView Grid.Row="0" x:Name="m_frameDirectory" ExplorerError="explorer_ExplorerError" Margin="0,4" Height="120" Loaded="frameDirectoryLoaded" SelectedPathChanged="frameDirectory_SelectedPathChanged"/>
+                        
                         <Label Grid.Row="0" Content="Horizontal Frame" Margin="0,4"/>
                         <ListBox Grid.Row="1" x:Name="m_FramesHorizontal" Margin="0,4" Height="180"/>
 
