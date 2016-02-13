@@ -17,6 +17,8 @@ using composer_gui.Controls;
 using Microsoft.Win32;
 using System.IO;
 using ComposerBridge;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using Microsoft.WindowsAPICodePack.Shell;
 
 namespace composer_gui
 {
@@ -42,8 +44,10 @@ namespace composer_gui
 
             m_InputFiles.ItemsSource = m_Files;
             m_FramesHorizontal.ItemsSource = m_FrameFiles;
-            m_FramesVertical.ItemsSource = m_FrameFiles;
 
+            m_inputPath.Text = m_definition.InputDirectory;
+            m_outputPath.Text = m_definition.OutputDirectory;
+            m_framePath.Text = m_definition.FramesDirectory;
         }
 
         IEnumerable<string> Files
@@ -90,7 +94,7 @@ namespace composer_gui
 
         private string getVerticalFrame()
         {
-            return m_FramesVertical.SelectedItem.ToString();
+            return m_FramesHorizontal.SelectedItem.ToString();
         }
 
         private async void m_Process_Click(object sender, RoutedEventArgs e)
@@ -133,13 +137,13 @@ namespace composer_gui
             m_InputFiles.SelectAll();
         }
 
-        private void inputDirectory_SelectedPathChanged(object sender, ExplorerSelectedPathChangedEventArgs e)
+        private void m_inputPath_TextChanged(object sender, TextChangedEventArgs e)
         {
             m_Files.Clear();
 
             try
             {
-                var sourceDirectory = e.SelectedPath;
+                var sourceDirectory = (sender as TextBox).Text;
                 var txtFiles = Directory.EnumerateFiles(sourceDirectory, "*.jpg", SearchOption.TopDirectoryOnly);
 
                 m_Files.AddRange(txtFiles);
@@ -152,13 +156,13 @@ namespace composer_gui
             this.m_InputFiles.Items.Refresh();
         }
 
-        private void frameDirectory_SelectedPathChanged(object sender, ExplorerSelectedPathChangedEventArgs e)
+        private void m_framePath_TextChanged(object sender, TextChangedEventArgs e)
         {
             m_FrameFiles.Clear();
 
             try
             {
-                var sourceDirectory = e.SelectedPath;
+                var sourceDirectory = (sender as TextBox).Text;
                 var txtFiles = Directory.EnumerateFiles(sourceDirectory, "*.tif", SearchOption.TopDirectoryOnly);
 
                 m_FrameFiles.AddRange(txtFiles);
@@ -169,25 +173,54 @@ namespace composer_gui
 
             }
 
-            this.m_FramesHorizontal.Items.Refresh();
-            this.m_FramesVertical.Items.Refresh();
+            m_FramesHorizontal.Items.Refresh();
+            
         }
 
-        private void inputDirectoryLoaded(object sender, RoutedEventArgs e)
+        private void SelectFolder( Action<string> a )
         {
-            //todo: check if path exists
-            m_inputDirectory.SelectedPath = m_definition.InputDirectory;
+            // Display a CommonOpenFileDialog to select only folders 
+            CommonOpenFileDialog cfd = new CommonOpenFileDialog();
+            cfd.EnsureReadOnly = true;
+            cfd.IsFolderPicker = true;
+            cfd.AllowNonFileSystemItems = true;
 
+            if (cfd.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                ShellContainer selectedSO = null;
+
+                // Try to get a valid selected item
+                selectedSO = cfd.FileAsShellObject as ShellContainer;
+
+                a(selectedSO.ParsingName);
+            }
         }
 
-        private void outputDirectoryLoaded(object sender, RoutedEventArgs e)
+        private void m_InputDirectorySelect_Click(object sender, RoutedEventArgs e)
         {
-            m_outputDirectory.SelectedPath = m_definition.OutputDirectory;
+            SelectFolder((string s) =>
+            {
+                // Set the path in our filename textbox
+                m_inputPath.Text = s;
+            });
         }
 
-        private void frameDirectoryLoaded(object sender, RoutedEventArgs e)
+        private void m_outputDirectorySelect_Click(object sender, RoutedEventArgs e)
         {
-            m_frameDirectory.SelectedPath = m_definition.FramesDirectory;
+            SelectFolder((string s) =>
+            {
+                // Set the path in our filename textbox
+                m_outputPath.Text = s;
+            });
+        }
+
+        private void m_frameDirectorySelect_Click(object sender, RoutedEventArgs e)
+        {
+            SelectFolder((string s) =>
+            {
+                // Set the path in our filename textbox
+                m_framePath.Text = s;
+            });
         }
     }
 }
