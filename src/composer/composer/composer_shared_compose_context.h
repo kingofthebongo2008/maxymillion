@@ -51,6 +51,35 @@ namespace composer
             }
         }
 
+        shared_compose_context(const::std::shared_ptr<shared_system_context>& system, const std::wstring& url_model) : m_system(system)
+        {
+            auto d = static_cast<ID3D11Device*> (*this);
+            auto c = static_cast<ID3D11DeviceContext*> (*this);
+
+            concurrency::task_group g;
+
+            g.run([this, d, c, url_model, system]()
+            {
+                auto dc = d3d11::create_defered_context(d);
+                m_photo_models.m_photo_model_horizontal = gpu::create_texture_resource(d, dc, url_model.c_str());
+                execute_command_list(d3d11::finish_command_list(dc));
+            });
+
+            g.wait();
+
+            auto h = m_photo_models.m_photo_model_horizontal;
+
+            //swap horizontal and vertcal frame if needed
+            if (h.width() < h.height())
+            {
+                m_photo_models.m_photo_model_vertical = h;
+            }
+            else
+            {
+
+            }
+        }
+
         ID3D11ShaderResourceView* get_model_texture(photo_mode mode) const
         {
             if (mode == photo_mode::horizontal)
