@@ -125,7 +125,7 @@ int32_t main( int32_t , char const* [] )
     std::wcout << L"vertical   model: " << url2.get_path_wstring() << std::endl;
 
     auto shared_system = std::make_shared< composer::shared_system_context> (d3d11::create_system_context());
-    auto shared = std::make_shared< composer::shared_compose_context >( shared_system, url1.get_path_wstring(), url2.get_path_wstring() );
+    auto shared = std::make_shared< composer::shared_compose_context >( shared_system, url1.get_path_wstring() );
 
     std::cout << "Initialization " << timer.milliseconds() << " ms" << std::endl;
     timer.reset();

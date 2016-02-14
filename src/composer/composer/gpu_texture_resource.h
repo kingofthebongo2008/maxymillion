@@ -49,6 +49,13 @@ namespace composer
                 return d.Height;
             }
 
+            D3D11_TEXTURE2D_DESC get_desc() const
+            {
+                D3D11_TEXTURE2D_DESC d;
+                m_texture->GetDesc(&d);
+                return d;
+            }
+
             d3d11::itexture2d_ptr               m_texture;
             d3d11::ishaderresourceview_ptr      m_texture_srv;
         };

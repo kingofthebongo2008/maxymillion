@@ -73,10 +73,11 @@ namespace composer
             if (h.width() < h.height())
             {
                 m_photo_models.m_photo_model_vertical = h;
+                m_photo_models.m_photo_model_horizontal = gpu::texture_resource(d, rotate_image(h, c) );
             }
             else
             {
-
+                m_photo_models.m_photo_model_vertical = gpu::texture_resource(d, rotate_image(h, c));
             }
         }
 
@@ -148,6 +149,59 @@ namespace composer
         std::shared_ptr<shared_system_context>              m_system;
         //shared read only
         photo_models                                        m_photo_models;
+
+        d3d11::itexture2d_ptr rotate_image(gpu::texture_resource image, ID3D11DeviceContext* device_context)
+        {
+            auto d = static_cast<ID3D11Device*>(*this);
+            auto desc = image.get_desc();
+            auto width = desc.Height;  //swap
+            auto height = desc.Width;
+
+            auto resource = gx::create_render_target_resource(d, width, height, desc.Format);
+
+            d3d11::vs_set_shader(device_context, m_system->get_rotate_shader_vs());
+            d3d11::ps_set_shader(device_context, m_system->get_rotate_shader_ps());
+
+            d3d11::gs_set_shader(device_context, nullptr);
+            d3d11::ds_set_shader(device_context, nullptr);
+            d3d11::hs_set_shader(device_context, nullptr);
+
+            //set render target as the back buffer, goes to the operating system
+            d3d11::om_set_render_target(device_context, resource);
+
+            D3D11_VIEWPORT v = {};
+
+            v.Height = static_cast<float>(height);
+            v.Width  = static_cast<float>(width);
+
+            v.MinDepth = 0.0f;
+            v.MaxDepth = 1.0f;
+
+            //set a view port for rendering
+            device_context->RSSetViewports(1, &v);
+
+            //clear the back buffer
+            const float fraction = 0.0f;
+            d3d11::clear_render_target_view(device_context, resource, math::set(0, 0, fraction, 1.0f));
+
+            d3d11::om_set_depth_state(device_context, *this);
+            d3d11::rs_set_state(device_context, *this);
+            d3d11::om_set_blend_state(device_context, *this);
+
+            d3d11::ia_set_index_buffer(device_context, nullptr);
+            d3d11::ia_set_vertex_buffer(device_context, nullptr, 0);
+            d3d11::ia_set_input_layout(device_context, nullptr);
+            d3d11::ia_set_primitive_topology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+            d3d11::ps_set_sampler_state(device_context, *this);
+
+            d3d11::ps_set_shader_resource(device_context, image);
+
+            device_context->Draw(3, 0);
+
+            return resource.m_resource;
+        }
+
     };
 
 }

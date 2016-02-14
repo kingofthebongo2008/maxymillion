@@ -14,7 +14,8 @@ namespace Composer
         {
             public:
 
-            SharedComposeContext( SharedSystemContext* system, const std::wstring& model0, const std::wstring& model1   );
+            SharedComposeContext( SharedSystemContext* system, const std::wstring& model0, const std::wstring& model1 );
+            SharedComposeContext( SharedSystemContext* system, const std::wstring& model0);
             ~SharedComposeContext();
 
             void ComposeImages(const std::vector< std::wstring > in, const std::vector< std::wstring > & out);

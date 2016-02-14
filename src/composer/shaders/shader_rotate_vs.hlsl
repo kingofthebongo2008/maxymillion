@@ -72,26 +72,7 @@ vs_samples_output main( in uint vertex_id: SV_VertexID)
     vs_samples_output r;
     r.m_position = triangle_screen_space(vertex_id);
     r.m_uv0 = triangle_uv(vertex_id);
-
-    float3x3 t0 = translate(float2(-0.5, 0.0f));
-    
-#ifdef HORIZONTAL
-    float3x3 t1 = scale(float2( 2285.0f/ 2464.0f, 1.0f));
-#else
-    float3x3 t1 = scale(float2(1.0f, 2285.0f / 2464.0f) );
-#endif
-    float3x3 t2 = translate(float2(0.5, 0.0f));
-
-    r.m_uv0 = triangle_uv(vertex_id);
-
-    //scale the uvs to crop the picture
-    float3 uv1 = float3(r.m_uv0, 1.0f);
-
-    uv1 = mul(uv1, t0);
-    uv1 = mul(uv1, t1);
-    uv1 = mul(uv1, t2);
-
-    r.m_uv1 = uv1.xy;
+    r.m_uv1 = r.m_uv0;
 
     return r;
 }

@@ -107,6 +107,15 @@ namespace Composer
 
             }
 
+
+            ComposeContext(ComposerRuntime^ runtime, System::String^ model0) :
+                m_runtime(runtime)
+                , m_model0(model0)
+            {
+
+
+            }
+
             void ComposeImages( System::Collections::Generic::IEnumerable<System::String^> ^  inputFiles, System::String^ ouputDirectory ) 
             {
                 using namespace msclr::interop;
@@ -115,11 +124,18 @@ namespace Composer
                 std::vector<std::wstring> out = create_out_file_names(in,  marshal_as<std::wstring>(ouputDirectory) );
                 
                 System::String^ m0(m_model0);
-                System::String^ m1(m_model1);
 
-                std::auto_ptr<SharedComposeContext> ctx(new SharedComposeContext(m_runtime->Get(), marshal_as<std::wstring>(m0), marshal_as<std::wstring>(m1)));
-
-                ctx->ComposeImages(in, out);
+                if (m_model1 != nullptr)
+                {
+                    System::String^ m1(m_model1);
+                    std::auto_ptr<SharedComposeContext> ctx(new SharedComposeContext(m_runtime->Get(), marshal_as<std::wstring>(m0), marshal_as<std::wstring>(m1)));
+                    ctx->ComposeImages(in, out);
+                }
+                else
+                {
+                    std::auto_ptr<SharedComposeContext> ctx(new SharedComposeContext(m_runtime->Get(), marshal_as<std::wstring>(m0)));
+                    ctx->ComposeImages(in, out);
+                }
             }
         };
     }

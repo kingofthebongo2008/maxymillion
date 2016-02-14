@@ -15,25 +15,13 @@ struct vs_samples_output
 };
 
 Texture2D		photo_model: register(t0);
-Texture2D		photo : register(t1);
+
 SamplerState	photo_sampler : register(s0);
 
 float4 main(in vs_samples_output i) : sv_target0
 {
-    float3 f0 = photo_model.Sample(photo_sampler, i.m_uv0).xyz;
-    float3 f1 = photo.Sample(photo_sampler, i.m_uv1).xyz;
-
-    float3 mask = float3 ( 197 / 255.0f, 201 / 255.0f, 195 / 255.0f  );
-
-    float3 d = abs(f0 - mask);
-    float  r = dot(d, float3(1.0f, 1.0f, 1.0f));
-
-    float3 f = f0;
-    if ( r == 0.0f )
-    {
-        f = f1;
-    }
-
-    return float4( f, 1.0f);
+    float2 uv2 = float2 (1.0f - i.m_uv0.y, i.m_uv0.x);
+    float3 f0 = photo_model.Sample(photo_sampler, uv2).xyz;
+    return float4( f0, 1.0f);
 }
 

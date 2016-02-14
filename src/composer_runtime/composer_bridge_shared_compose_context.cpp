@@ -59,11 +59,21 @@ namespace Composer
             {
                 m_shared_compose_context = std::make_shared< composer::shared_compose_context>(system->Get(), model0, model1);
             }
+
+            SharedComposeContextImpl(SharedSystemContext* system, const std::wstring& model0)
+            {
+                m_shared_compose_context = std::make_shared< composer::shared_compose_context>(system->Get(), model0);
+            }
         };
 
         SharedComposeContext::SharedComposeContext(SharedSystemContext* system, const std::wstring& model0, const std::wstring& model1): m_impl( new SharedComposeContextImpl( system, model0, model1) )
         {
             
+        }
+
+        SharedComposeContext::SharedComposeContext(SharedSystemContext* system, const std::wstring& model0) : m_impl(new SharedComposeContextImpl(system, model0))
+        {
+
         }
 
         SharedComposeContext::~SharedComposeContext()

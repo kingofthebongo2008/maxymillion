@@ -94,7 +94,15 @@ namespace composer_gui
 
         private string getVerticalFrame()
         {
-            return m_FramesHorizontal.SelectedItems[1].ToString();
+            if (m_FramesHorizontal.SelectedItems.Count > 1 )
+            {
+                return m_FramesHorizontal.SelectedItems[1].ToString();
+            }
+            else
+            {
+                return string.Empty;
+            }
+            
         }
 
         private async void m_Process_Click(object sender, RoutedEventArgs e)
@@ -114,9 +122,16 @@ namespace composer_gui
                             m_Progress.IsIndeterminate = true;
                         });
 
-                    var context = new Composer.Bridge.ComposeContext(m_Runtime, h, v);
-
-                    context.ComposeImages(i, o);
+                    if (v != string.Empty)
+                    {
+                        var context = new Composer.Bridge.ComposeContext(m_Runtime, h, v);
+                        context.ComposeImages(i, o);
+                    }
+                    else
+                    {
+                        var context = new Composer.Bridge.ComposeContext(m_Runtime, h);
+                        context.ComposeImages(i, o);
+                    }
 
                     m_Progress.Dispatcher.Invoke(
                         () =>

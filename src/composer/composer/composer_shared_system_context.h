@@ -111,6 +111,16 @@ namespace composer
             return m_ps_crop;
         }
 
+        ID3D11VertexShader* get_rotate_shader_vs() const
+        {
+            return m_vs_rotate;
+        }
+        
+        ID3D11PixelShader* get_rotate_shader_ps() const
+        {
+            return m_ps_rotate;
+        }
+
         operator ID3D11BlendState*()  const
         {
             return m_blend_state.get();
