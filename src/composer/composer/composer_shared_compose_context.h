@@ -41,6 +41,14 @@ namespace composer
 
             g.wait();
 
+            auto h = m_photo_models.m_photo_model_horizontal;
+            auto v = m_photo_models.m_photo_model_vertical;
+
+            //swap horizontal and vertcal frame if needed
+            if (h.width() < v.width())
+            {
+                std::swap(m_photo_models.m_photo_model_horizontal, m_photo_models.m_photo_model_vertical);
+            }
         }
 
         ID3D11ShaderResourceView* get_model_texture(photo_mode mode) const
