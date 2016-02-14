@@ -10,6 +10,8 @@
 #include "shaders/shader_crop_vertical_vs.h"
 #include "shaders/shader_crop_horizontal_vs.h"
 #include "shaders/shader_crop_ps.h"
+#include "shaders/shader_rotate_ps.h"
+#include "shaders/shader_rotate_vs.h"
 
 #include <ppl.h>
 
@@ -47,6 +49,15 @@ namespace composer
                 m_ps_crop = create_shader_crop_ps(d);
             });
 
+            g.run([this, d]()
+            {
+                m_ps_rotate = create_shader_rotate_ps(d);
+            });
+
+            g.run([this, d]()
+            {
+                m_vs_rotate = create_shader_rotate_vs(d);
+            });
 
             g.run([this, d]()
             {
@@ -148,6 +159,9 @@ namespace composer
         shader_crop_vertical_vs                             m_vs_crop_vertical;
         shader_crop_horizontal_vs                           m_vs_crop_horizontal;
         shader_crop_ps                                      m_ps_crop;
+
+        shader_rotate_ps                                    m_ps_rotate;
+        shader_rotate_vs                                    m_vs_rotate;
 
     };
 }

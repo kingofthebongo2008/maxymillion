@@ -131,6 +131,12 @@
     <ClInclude Include="..\src\composer\composer\composer_shared_system_context.h">
       <Filter>source Files\src\composer</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_rotate_ps.h">
+      <Filter>source Files\src\composer\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_rotate_vs.h">
+      <Filter>source Files\src\composer\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\composer\main.cpp">
@@ -151,6 +157,12 @@
       <Filter>source Files\shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\composer\shaders\shader_crop_vs.hlsl">
+      <Filter>source Files\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\composer\shaders\shader_rotate_ps.hlsl">
+      <Filter>source Files\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\composer\shaders\shader_rotate_vs.hlsl">
       <Filter>source Files\shaders</Filter>
     </FxCompile>
   </ItemGroup>
