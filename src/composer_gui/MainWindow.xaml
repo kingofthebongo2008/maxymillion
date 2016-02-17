@@ -43,7 +43,7 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBox Margin="4,0,0,0" Grid.Column="0" Text="{Binding SelectedPath, ElementName=m_inputDirectory, Mode=OneWay}" x:Name="m_inputPath" TextChanged="m_inputPath_TextChanged"/>
-                            <Button  Margin="0,0,0,0" Grid.Column="1" Content="..." x:Name="m_InputDirectorySelect" HorizontalAlignment="Right" Width="40" Click="m_InputDirectorySelect_Click" />
+                            <Button  Margin="0,0,0,0" Grid.Column="1" Content="..." x:Name="m_InputDirectorySelect" HorizontalAlignment="Left" Width="40" Click="m_InputDirectorySelect_Click" />
                         </Grid>
 
 

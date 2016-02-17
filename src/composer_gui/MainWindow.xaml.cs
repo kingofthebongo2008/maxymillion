@@ -152,13 +152,13 @@ namespace composer_gui
             m_InputFiles.SelectAll();
         }
 
-        private void m_inputPath_TextChanged(object sender, TextChangedEventArgs e)
+        private void handle_inputPath_TextChanged(string sourceDirectory)
         {
             m_Files.Clear();
 
             try
             {
-                var sourceDirectory = (sender as TextBox).Text;
+                
                 var txtFiles = Directory.EnumerateFiles(sourceDirectory, "*.jpg", SearchOption.TopDirectoryOnly);
 
                 m_Files.AddRange(txtFiles);
@@ -171,13 +171,20 @@ namespace composer_gui
             this.m_InputFiles.Items.Refresh();
         }
 
-        private void m_framePath_TextChanged(object sender, TextChangedEventArgs e)
+
+        private void m_inputPath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var sourceDirectory = (sender as TextBox).Text;
+            handle_inputPath_TextChanged(sourceDirectory);
+        }
+
+        private void handle_framePath_TextChanged( string sourceDirectory )
         {
             m_FrameFiles.Clear();
 
             try
             {
-                var sourceDirectory = (sender as TextBox).Text;
+                
                 var txtFiles = Directory.EnumerateFiles(sourceDirectory, "*.tif", SearchOption.TopDirectoryOnly);
 
                 m_FrameFiles.AddRange(txtFiles);
@@ -189,7 +196,13 @@ namespace composer_gui
             }
 
             m_FramesHorizontal.Items.Refresh();
-            
+
+        }
+
+        private void m_framePath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var sourceDirectory = (sender as TextBox).Text;
+            handle_framePath_TextChanged(sourceDirectory);
         }
 
         private void SelectFolder( Action<string> a )
@@ -215,8 +228,16 @@ namespace composer_gui
         {
             SelectFolder((string s) =>
             {
+                var text = m_inputPath.Text;
+                // Set the path in our filename textbox
+
                 // Set the path in our filename textbox
                 m_inputPath.Text = s;
+
+                if (s.Equals(text))
+                {
+                    handle_inputPath_TextChanged(s);
+                }
             });
         }
 
@@ -233,8 +254,15 @@ namespace composer_gui
         {
             SelectFolder((string s) =>
             {
+                var text = m_framePath.Text;
                 // Set the path in our filename textbox
                 m_framePath.Text = s;
+
+                if ( s.Equals( text ) )
+                {
+                    handle_framePath_TextChanged(s);
+                }
+                
             });
         }
     }
