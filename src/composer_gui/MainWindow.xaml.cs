@@ -205,13 +205,15 @@ namespace composer_gui
             handle_framePath_TextChanged(sourceDirectory);
         }
 
-        private void SelectFolder( Action<string> a )
+        private void SelectFolder( string name, Action<string> a )
         {
             // Display a CommonOpenFileDialog to select only folders 
-            CommonOpenFileDialog cfd = new CommonOpenFileDialog();
+            CommonOpenFileDialog cfd = new CommonOpenFileDialog(name);
             cfd.EnsureReadOnly = true;
             cfd.IsFolderPicker = true;
             cfd.AllowNonFileSystemItems = true;
+            cfd.InitialDirectory = name;
+
 
             if (cfd.ShowDialog() == CommonFileDialogResult.Ok)
             {
@@ -226,7 +228,7 @@ namespace composer_gui
 
         private void m_InputDirectorySelect_Click(object sender, RoutedEventArgs e)
         {
-            SelectFolder((string s) =>
+            SelectFolder(m_inputPath.Text, (string s) =>
             {
                 var text = m_inputPath.Text;
                 // Set the path in our filename textbox
@@ -243,7 +245,7 @@ namespace composer_gui
 
         private void m_outputDirectorySelect_Click(object sender, RoutedEventArgs e)
         {
-            SelectFolder((string s) =>
+            SelectFolder(m_outputPath.Text, (string s) =>
             {
                 // Set the path in our filename textbox
                 m_outputPath.Text = s;
@@ -252,7 +254,7 @@ namespace composer_gui
 
         private void m_frameDirectorySelect_Click(object sender, RoutedEventArgs e)
         {
-            SelectFolder((string s) =>
+            SelectFolder(m_framePath.Text, (string s) =>
             {
                 var text = m_framePath.Text;
                 // Set the path in our filename textbox
