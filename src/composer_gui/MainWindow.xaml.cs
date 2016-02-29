@@ -115,7 +115,6 @@ namespace composer_gui
                 var v = getVerticalFrame();
                 await Task.Run(() => {
 
-
                     m_Progress.Dispatcher.Invoke(
                         () =>
                         {
@@ -138,6 +137,12 @@ namespace composer_gui
                         {
                             m_Progress.IsIndeterminate = false;
                         });
+
+                    this.Dispatcher.Invoke(
+                       new Action(() =>
+                       {
+                           MessageBox.Show(this, "Processing completed", "Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+                       }));
                 });
             }
 
@@ -228,6 +233,46 @@ namespace composer_gui
 
         private void m_InputDirectorySelect_Click(object sender, RoutedEventArgs e)
         {
+            SelectInputPath();
+        }
+
+        private void SelectOutputPath()
+        {
+            SelectFolder(m_outputPath.Text, (string s) =>
+            {
+                // Set the path in our filename textbox
+                m_outputPath.Text = s;
+            });
+        }
+
+        private void m_outputDirectorySelect_Click(object sender, RoutedEventArgs e)
+        {
+            SelectOutputPath();
+        }
+
+        void SelectFramePath()
+        {
+            SelectFolder(m_framePath.Text, (string s) =>
+            {
+                var text = m_framePath.Text;
+                // Set the path in our filename textbox
+                m_framePath.Text = s;
+
+                if (s.Equals(text))
+                {
+                    handle_framePath_TextChanged(s);
+                }
+
+            });
+        }
+
+        private void m_frameDirectorySelect_Click(object sender, RoutedEventArgs e)
+        {
+            SelectFramePath();
+        }
+
+        private void SelectInputPath()
+        {
             SelectFolder(m_inputPath.Text, (string s) =>
             {
                 var text = m_inputPath.Text;
@@ -243,29 +288,19 @@ namespace composer_gui
             });
         }
 
-        private void m_outputDirectorySelect_Click(object sender, RoutedEventArgs e)
+        private void m_inputPath_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            SelectFolder(m_outputPath.Text, (string s) =>
-            {
-                // Set the path in our filename textbox
-                m_outputPath.Text = s;
-            });
+            SelectInputPath();
         }
 
-        private void m_frameDirectorySelect_Click(object sender, RoutedEventArgs e)
+        private void m_outputPath_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            SelectFolder(m_framePath.Text, (string s) =>
-            {
-                var text = m_framePath.Text;
-                // Set the path in our filename textbox
-                m_framePath.Text = s;
+            SelectOutputPath();
+        }
 
-                if ( s.Equals( text ) )
-                {
-                    handle_framePath_TextChanged(s);
-                }
-                
-            });
+        private void m_framePath_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SelectFramePath();
         }
     }
 }

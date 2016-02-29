@@ -42,7 +42,7 @@
                                 <ColumnDefinition Width="40" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBox Margin="4,0,0,0" Grid.Column="0" Text="{Binding SelectedPath, ElementName=m_inputDirectory, Mode=OneWay}" x:Name="m_inputPath" TextChanged="m_inputPath_TextChanged"/>
+                            <TextBox Margin="4,0,0,0" Grid.Column="0" Text="{Binding SelectedPath, ElementName=m_inputDirectory, Mode=OneWay}" x:Name="m_inputPath" TextChanged="m_inputPath_TextChanged" MouseDoubleClick="m_inputPath_MouseDoubleClick"/>
                             <Button  Margin="0,0,0,0" Grid.Column="1" Content="..." x:Name="m_InputDirectorySelect" HorizontalAlignment="Left" Width="40" Click="m_InputDirectorySelect_Click" />
                         </Grid>
 
@@ -69,7 +69,7 @@
                                 <ColumnDefinition Width="40" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBox Margin="4,0,0,0" Grid.Row="1" Text="{Binding SelectedPath, ElementName=m_outputDirectory, Mode=OneWay}" x:Name="m_outputPath"/>
+                            <TextBox Margin="4,0,0,0" Grid.Row="1" Text="{Binding SelectedPath, ElementName=m_outputDirectory, Mode=OneWay}" x:Name="m_outputPath" MouseDoubleClick="m_outputPath_MouseDoubleClick"/>
                             <Button  Margin="0,0,0,0" Grid.Column="1" Content="..." x:Name="m_outputDirectorySelect" Height="20" VerticalAlignment="Top" Click="m_outputDirectorySelect_Click"/>
                         </Grid>
                     </StackPanel>
@@ -91,7 +91,7 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="40" />
                             </Grid.ColumnDefinitions>
-                            <TextBox Margin="4,0,0,0" Grid.Row="1" Text="{Binding SelectedPath, ElementName=m_frameDirectory, Mode=OneWay}" x:Name="m_framePath" TextChanged="m_framePath_TextChanged" />
+                            <TextBox Margin="4,0,0,0" Grid.Row="1" Text="{Binding SelectedPath, ElementName=m_frameDirectory, Mode=OneWay}" x:Name="m_framePath" TextChanged="m_framePath_TextChanged" MouseDoubleClick="m_framePath_MouseDoubleClick" />
                             <Button  Margin="0,0,0,0" Grid.Column="1" Content="..." x:Name="m_frameDirectorySelect" Click="m_frameDirectorySelect_Click"/>
                         </Grid>
 
