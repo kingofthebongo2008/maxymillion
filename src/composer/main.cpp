@@ -113,8 +113,8 @@ int32_t main( int32_t , char const* [] )
     auto p2 = file_paths2(p, source_out.get_path());
 
     //read a texture
-    auto url1 = fs::build_media_url(base, L"model/Adele & Anthony.tif");
-    auto url2 = fs::build_media_url(base, L"model/Adele & Anthony VERT.tif");
+    auto url1 = fs::build_media_url(base, L"model/Adele & Anthony VERT1.tif");
+    auto url2 = fs::build_media_url(base, L"model/Adele & Anthony1.tif");
 
     //read the png texture
 
@@ -125,12 +125,12 @@ int32_t main( int32_t , char const* [] )
     std::wcout << L"vertical   model: " << url2.get_path_wstring() << std::endl;
 
     auto shared_system = std::make_shared< composer::shared_system_context> (d3d11::create_system_context());
-    auto shared = std::make_shared< composer::shared_compose_context >( shared_system, url1.get_path_wstring() );
+    auto shared = std::make_shared< composer::shared_compose_context >( shared_system, url1.get_path_wstring(), url2.get_path_wstring() );
 
     std::cout << "Initialization " << timer.milliseconds() << " ms" << std::endl;
     timer.reset();
 
-    concurrency::parallel_for( 0U, static_cast<uint32_t>( p.size()), [&shared, &p, &p2] ( uint32_t i )
+    concurrency::parallel_for( 0U, static_cast<uint32_t>( p.size() ), [&shared, &p, &p2] ( uint32_t i )
     {
         auto in = p[i];
         auto out = p2[i];

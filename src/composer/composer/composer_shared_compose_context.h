@@ -3,6 +3,7 @@
 #include <d3d11/d3d11_helpers.h>
 
 #include "gpu_texture_resource.h"
+#include "gpu_constant_buffer.h"
 #include "composer_shared_system_context.h"
 
 namespace composer
@@ -11,8 +12,35 @@ namespace composer
     {
         gpu::texture_resource               m_photo_model_horizontal;
         gpu::texture_resource               m_photo_model_vertical;
+        gpu::constant_buffer                m_photo_model_vertical_buffer;
+        gpu::constant_buffer                m_photo_model_horizontal_buffer;
     };
 
+    struct transparency_color
+    {
+        float m_r;
+        float m_g;
+        float m_b;
+        float m_a;
+    };
+
+    inline transparency_color pack_color(const gpu::rgb r )
+    {
+        transparency_color c;
+
+        c.m_r = r.b / 255.0f;
+        c.m_g = r.g / 255.0f;
+        c.m_b = r.r / 255.0f;
+        c.m_a = 0.0f;
+
+        transparency_color c2;
+        c2.m_r = 197 / 255.0f;
+        c2.m_g = 201 / 255.0f;
+        c2.m_b = 195 / 255.0f;
+        c2.m_a = 0.0f;
+
+        return c;
+    }
 
     class shared_compose_context
     {
@@ -28,14 +56,28 @@ namespace composer
             g.run([this, d, c, url_horizontal, system]()
             {
                 auto dc = d3d11::create_defered_context(d);
-                m_photo_models.m_photo_model_horizontal = gpu::create_texture_resource(d, dc, url_horizontal.c_str());
+                auto t  = gpu::create_texture_resource2(d, dc, url_horizontal.c_str());
+
+                auto transparency = pack_color(std::get<1>(t));
+                auto s = gpu::create_constant_buffer(d, sizeof(transparency), &transparency);
+
+                m_photo_models.m_photo_model_horizontal = std::get<0>(t);
+                m_photo_models.m_photo_model_horizontal_buffer = s;
                 execute_command_list(d3d11::finish_command_list(dc));
+
             });
 
             g.run([this, d, c, url_vertical, system]()
             {
                 auto dc = d3d11::create_defered_context(d);
-                m_photo_models.m_photo_model_vertical = gpu::create_texture_resource(d, dc, url_vertical.c_str());
+                auto t = gpu::create_texture_resource2(d, dc, url_vertical.c_str());
+                
+                auto transparency = pack_color(std::get<1>(t));
+                auto s = gpu::create_constant_buffer(d, sizeof(transparency), &transparency);
+
+                m_photo_models.m_photo_model_vertical = std::get<0>(t);
+                m_photo_models.m_photo_model_vertical_buffer = s;
+                
                 execute_command_list(d3d11::finish_command_list(dc));
             });
 
@@ -48,6 +90,7 @@ namespace composer
             if (h.width() < v.width())
             {
                 std::swap(m_photo_models.m_photo_model_horizontal, m_photo_models.m_photo_model_vertical);
+                std::swap(m_photo_models.m_photo_model_horizontal_buffer, m_photo_models.m_photo_model_vertical_buffer);
             }
         }
 
@@ -61,7 +104,13 @@ namespace composer
             g.run([this, d, c, url_model, system]()
             {
                 auto dc = d3d11::create_defered_context(d);
-                m_photo_models.m_photo_model_horizontal = gpu::create_texture_resource(d, dc, url_model.c_str());
+                auto t = gpu::create_texture_resource2(d, dc, url_model.c_str());
+                
+                auto transparency = pack_color(std::get<1>(t));
+                auto s = gpu::create_constant_buffer(d, sizeof(transparency), &transparency);
+
+                m_photo_models.m_photo_model_horizontal         = std::get<0>(t);
+                m_photo_models.m_photo_model_horizontal_buffer  = s;
                 execute_command_list(d3d11::finish_command_list(dc));
             });
 
@@ -72,12 +121,16 @@ namespace composer
             //swap horizontal and vertcal frame if needed
             if (h.width() < h.height())
             {
-                m_photo_models.m_photo_model_vertical = h;
-                m_photo_models.m_photo_model_horizontal = gpu::texture_resource(d, rotate_image(h, c) );
+                m_photo_models.m_photo_model_vertical          = h;
+                m_photo_models.m_photo_model_horizontal        = gpu::texture_resource(d, rotate_image(h, c) );
+
+                //assume on rotation the center pixel is the same, otherwise we must sample on the gpu
+                m_photo_models.m_photo_model_horizontal_buffer = m_photo_models.m_photo_model_vertical_buffer;
             }
             else
             {
-                m_photo_models.m_photo_model_vertical = gpu::texture_resource(d, rotate_image(h, c));
+                m_photo_models.m_photo_model_vertical        = gpu::texture_resource(d, rotate_image(h, c));
+                m_photo_models.m_photo_model_vertical_buffer = m_photo_models.m_photo_model_horizontal_buffer;
             }
         }
 
@@ -90,6 +143,18 @@ namespace composer
             else
             {
                 return this->m_photo_models.m_photo_model_vertical.m_texture_srv.get();
+            }
+        }
+
+        ID3D11Buffer* get_model_buffer(photo_mode mode) const
+        {
+            if (mode == photo_mode::horizontal)
+            {
+                return this->m_photo_models.m_photo_model_horizontal_buffer.m_buffer.get();
+            }
+            else
+            {
+                return this->m_photo_models.m_photo_model_vertical_buffer.m_buffer.get();
             }
         }
 

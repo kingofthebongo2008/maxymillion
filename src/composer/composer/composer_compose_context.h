@@ -60,6 +60,8 @@ namespace composer
 
                 d3d11::ps_set_shader_resources(device_context, m_shared_context->get_model_texture(get_mode(*this)), image);
 
+                d3d11::ps_set_constant_buffer(device_context, m_shared_context->get_model_buffer(get_mode(*this)));
+
                 device_context->Draw(3, 0);
 
                 d3d11::copy_resource(device_context, m_read_back_texture, m_render_target_texture);

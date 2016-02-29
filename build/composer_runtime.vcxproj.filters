@@ -45,6 +45,9 @@
     <ClInclude Include="..\src\composer_runtime\composer_bridge_shared_compose_context.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\composer\shaders\shader_full_screen.h">
+      <Filter>Source Files\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\composer_runtime\composer_runtime.cpp">
@@ -79,5 +82,7 @@
     <FxCompile Include="..\src\composer\shaders\shader_crop_vs.hlsl">
       <Filter>Source Files\shaders</Filter>
     </FxCompile>
+    <FxCompile Include="..\src\composer\shaders\shader_rotate_vs.hlsl" />
+    <FxCompile Include="..\src\composer\shaders\shader_rotate_ps.hlsl" />
   </ItemGroup>
 </Project>

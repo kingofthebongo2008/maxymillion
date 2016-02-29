@@ -7,6 +7,13 @@ namespace composer
 {
     namespace gpu
     {
+        struct rgb
+        {
+            uint8_t r;
+            uint8_t g;
+            uint8_t b;
+        };
+
         namespace
         {
             DXGI_FORMAT translate_format(imaging::image_type t)
@@ -28,13 +35,10 @@ namespace composer
             //assume 32 bit destination
           
             auto dst_row_pitch  = m.RowPitch;
-//            auto dst_row_height = d.Height;
             auto dst_row_width  = d.Width;
 
             auto src_row_pitch  = t.get_pitch();
-            //auto src_row_height = t.get_height();
-            //auto src_row_width = t.get_width();
-            
+           
             uint8_t* source         = reinterpret_cast<uint8_t*> (t.get_pixels().get_pixels_cpu() );
             uint8_t* destination    = reinterpret_cast<uint8_t*> (m.pData);
             
@@ -55,7 +59,6 @@ namespace composer
                 }
             }
         }
-
 
         inline  d3d11::itexture2d_ptr upload_to_gpu(ID3D11DeviceContext* context, d3d11::itexture2d_ptr gpu_texture, const imaging::cpu_texture& t )
         {
@@ -176,6 +179,24 @@ namespace composer
             context->Unmap(texture, 0);
 
             return r;
+        }
+
+        inline rgb sample_texture(const imaging::cpu_texture& t, uint32_t x, uint32_t y)
+        {
+            auto row_pitch  = t.get_pitch();
+            uint8_t*       source = t.get_pixels().get_pixels_cpu();
+            auto  pixel = reinterpret_cast<rgb*>( source + y * row_pitch + x * 3 );
+            return *pixel;
+        }
+
+        inline rgb sample_texture_center(const imaging::cpu_texture& t)
+        {
+            auto row_height = t.get_height();
+            auto row_width  = t.get_width();
+            auto x          = row_width / 2;
+
+            auto y          = row_height / 2;
+            return sample_texture(t, x, y);
         }
     }
 

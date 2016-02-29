@@ -122,6 +122,7 @@ namespace d3d11
             return result;
         }
     }
+    
     //----------------------------------------------------------------------------------------------------------
     inline d3d11::ibuffer_ptr create_constant_buffer(ID3D11Device* device, size_t size)
     {
@@ -133,6 +134,35 @@ namespace d3d11
         desc.Usage = D3D11_USAGE_DYNAMIC;
         desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
         os::windows::throw_if_failed<d3d11::create_buffer_exception> (device->CreateBuffer(&desc, nullptr, &result ));
+        return result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------
+    inline d3d11::ibuffer_ptr create_gpu_constant_buffer(ID3D11Device* device, size_t size)
+    {
+        D3D11_BUFFER_DESC desc = {};
+        d3d11::ibuffer_ptr result;
+
+        desc.ByteWidth = std::max< uint32_t>(16, static_cast<uint32_t> (size));
+        desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        desc.Usage = D3D11_USAGE_DEFAULT;
+        os::windows::throw_if_failed<d3d11::create_buffer_exception>(device->CreateBuffer(&desc, nullptr, &result));
+        return result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------
+    inline d3d11::ibuffer_ptr create_gpu_constant_buffer(ID3D11Device* device, size_t size, const void* initial_data)
+    {
+        D3D11_BUFFER_DESC desc = {};
+        d3d11::ibuffer_ptr result;
+
+        desc.ByteWidth = std::max< uint32_t>(16, static_cast<uint32_t> (size));
+        desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        desc.Usage = D3D11_USAGE_DEFAULT;
+
+        D3D11_SUBRESOURCE_DATA initial_data_dx = { initial_data, 0, 0 };
+
+        os::windows::throw_if_failed<d3d11::create_buffer_exception>(device->CreateBuffer(&desc, &initial_data_dx, &result));
         return result;
     }
 
@@ -648,6 +678,25 @@ namespace d3d11
     {
         ps_set_shader_resources( device_context, slot, 1, &shader_resource_view );
     }
+
+    //----------------------------------------------------------------------------------------------------------
+    inline void ps_set_constant_buffers(ID3D11DeviceContext* device_context, resource_slot slot, resource_count num_views, const ID3D11Buffer * const * shader_resource_view)
+    {
+        device_context->PSSetConstantBuffers(slot, num_views, const_cast<ID3D11Buffer * const * > (shader_resource_view));
+    }
+
+    //----------------------------------------------------------------------------------------------------------
+    inline void ps_set_constant_buffers(ID3D11DeviceContext* device_context, resource_slot slot, const ID3D11Buffer * shader_resource_view)
+    {
+        ps_set_constant_buffers(device_context, slot, 1, &shader_resource_view);
+    }
+
+    //----------------------------------------------------------------------------------------------------------
+    inline void ps_set_constant_buffer(ID3D11DeviceContext* device_context, const ID3D11Buffer * shader_resource_view)
+    {
+        ps_set_constant_buffers(device_context, resource_slot(0), 1, &shader_resource_view);
+    }
+
     //----------------------------------------------------------------------------------------------------------
     inline void ps_set_shader(ID3D11DeviceContext* device_context, const ID3D11PixelShader * const pixel_shader )
     {

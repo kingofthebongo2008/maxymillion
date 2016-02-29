@@ -137,6 +137,12 @@
     <ClInclude Include="..\src\composer\composer\shaders\shader_rotate_vs.h">
       <Filter>source Files\src\composer\shaders</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\composer\shaders\shader_full_screen.h">
+      <Filter>source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\gpu_constant_buffer.h">
+      <Filter>source Files\src\composer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\composer\main.cpp">

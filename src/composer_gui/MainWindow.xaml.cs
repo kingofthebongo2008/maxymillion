@@ -34,6 +34,13 @@ namespace composer_gui
 
         ComposerJobDefinition m_definition;
 
+        enum SelectDirectoryOption
+        {
+            Folder,
+            File
+        };
+
+
         public MainWindow( )
         {
             App a = (composer_gui.App)App.Current;
@@ -210,24 +217,28 @@ namespace composer_gui
             handle_framePath_TextChanged(sourceDirectory);
         }
 
-        private void SelectFolder( string name, Action<string> a )
+        private void SelectFolder( string name, SelectDirectoryOption option, Action<string> a )
         {
             // Display a CommonOpenFileDialog to select only folders 
             CommonOpenFileDialog cfd = new CommonOpenFileDialog(name);
             cfd.EnsureReadOnly = true;
-            cfd.IsFolderPicker = true;
+            cfd.IsFolderPicker = option == SelectDirectoryOption.Folder ? true : false;
             cfd.AllowNonFileSystemItems = true;
             cfd.InitialDirectory = name;
 
 
-            if (cfd.ShowDialog() == CommonFileDialogResult.Ok)
+            if (cfd.ShowDialog(this) == CommonFileDialogResult.Ok)
             {
-                ShellContainer selectedSO = null;
-
-                // Try to get a valid selected item
-                selectedSO = cfd.FileAsShellObject as ShellContainer;
-
-                a(selectedSO.ParsingName);
+                if ( option == SelectDirectoryOption.Folder )
+                {
+                    var selectedSO = cfd.FileAsShellObject as ShellContainer;
+                    a(selectedSO.ParsingName);
+                }
+                else
+                {
+                    var p = System.IO.Path.GetDirectoryName(cfd.FileName);
+                    a(p);
+                }
             }
         }
 
@@ -238,7 +249,7 @@ namespace composer_gui
 
         private void SelectOutputPath()
         {
-            SelectFolder(m_outputPath.Text, (string s) =>
+            SelectFolder(m_outputPath.Text, SelectDirectoryOption.Folder, (string s) =>
             {
                 // Set the path in our filename textbox
                 m_outputPath.Text = s;
@@ -252,7 +263,7 @@ namespace composer_gui
 
         void SelectFramePath()
         {
-            SelectFolder(m_framePath.Text, (string s) =>
+            SelectFolder(m_framePath.Text, SelectDirectoryOption.Folder, (string s) =>
             {
                 var text = m_framePath.Text;
                 // Set the path in our filename textbox
@@ -262,7 +273,6 @@ namespace composer_gui
                 {
                     handle_framePath_TextChanged(s);
                 }
-
             });
         }
 
@@ -273,7 +283,7 @@ namespace composer_gui
 
         private void SelectInputPath()
         {
-            SelectFolder(m_inputPath.Text, (string s) =>
+            SelectFolder(m_inputPath.Text, SelectDirectoryOption.File, (string s) =>
             {
                 var text = m_inputPath.Text;
                 // Set the path in our filename textbox

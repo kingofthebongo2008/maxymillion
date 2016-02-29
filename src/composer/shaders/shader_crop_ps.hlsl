@@ -1,11 +1,12 @@
-cbuffer transform_info : register(b0)
+cbuffer transparency_color : register(b0)
 {
-    float m_center_x;
-    float m_center_y;
-
-    float m_image_width;
-    float m_image_height;
+    float4 m_color;
 };
+
+float3 unpack_transparency2(float4 v )
+{
+    return float3(v.xyz);
+}
 
 struct vs_samples_output
 {
@@ -25,7 +26,9 @@ float4 main(in vs_samples_output i) : sv_target0
 
     float3 mask = float3 ( 197 / 255.0f, 201 / 255.0f, 195 / 255.0f  );
 
-    float3 d = abs(f0 - mask);
+    float3 transparency = unpack_transparency2(m_color);
+    float3 mask2 = transparency;
+    float3 d = abs(f0 - mask2);
     float  r = dot(d, float3(1.0f, 1.0f, 1.0f));
 
     float3 f = f0;
@@ -34,6 +37,6 @@ float4 main(in vs_samples_output i) : sv_target0
         f = f1;
     }
 
-    return float4( f, 1.0f);
+    return float4(f, 1.0f);
 }
 
