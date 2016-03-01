@@ -171,9 +171,14 @@ namespace composer_gui
             try
             {
                 
-                var txtFiles = Directory.EnumerateFiles(sourceDirectory, "*.jpg", SearchOption.TopDirectoryOnly);
+                var txtFiles0 = Directory.EnumerateFiles(sourceDirectory, "*.jpg", SearchOption.TopDirectoryOnly);
+                var txtFiles1 = Directory.EnumerateFiles(sourceDirectory, "*.jpeg", SearchOption.TopDirectoryOnly);
 
-                m_Files.AddRange(txtFiles);
+                m_Files.AddRange(txtFiles0);
+                m_Files.AddRange(txtFiles1);
+
+                m_Files.Sort();
+
             }
             catch (Exception)
             {
