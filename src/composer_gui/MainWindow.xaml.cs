@@ -117,6 +117,14 @@ namespace composer_gui
             try
             {
                 var i = getInputFiles();
+
+                if ( i.Count == 0 )
+                {
+                    MessageBox.Show(this, "There are no selected input images", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+
                 var o = getOutputDirectory();
                 var h = getHorizontalFrame();
                 var v = getVerticalFrame();
