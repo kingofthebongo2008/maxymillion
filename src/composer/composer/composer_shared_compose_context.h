@@ -122,8 +122,9 @@ namespace composer
             if (h.width() < h.height())
             {
                 m_photo_models.m_photo_model_vertical          = h;
-                m_photo_models.m_photo_model_horizontal        = gpu::texture_resource(d, rotate_image(h, c) );
+                m_photo_models.m_photo_model_vertical_buffer   = m_photo_models.m_photo_model_horizontal_buffer;
 
+                m_photo_models.m_photo_model_horizontal        = gpu::texture_resource(d, rotate_image(h, c) );
                 //assume on rotation the center pixel is the same, otherwise we must sample on the gpu
                 m_photo_models.m_photo_model_horizontal_buffer = m_photo_models.m_photo_model_vertical_buffer;
             }
