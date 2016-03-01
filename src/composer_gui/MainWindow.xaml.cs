@@ -268,7 +268,7 @@ namespace composer_gui
 
         void SelectFramePath()
         {
-            SelectFolder(m_framePath.Text, SelectDirectoryOption.Folder, (string s) =>
+            SelectFolder(m_framePath.Text, SelectDirectoryOption.File, (string s) =>
             {
                 var text = m_framePath.Text;
                 // Set the path in our filename textbox
