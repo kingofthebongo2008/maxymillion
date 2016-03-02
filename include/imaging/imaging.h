@@ -9,15 +9,16 @@
 
 namespace imaging
 {
-    typedef os::windows::com_ptr<IWICImagingFactory>     wic_imaging_factory;
-    typedef os::windows::com_ptr<IWICStream>             wic_stream;
-    typedef os::windows::com_ptr<IWICBitmapDecoder>      wic_decoder;
-    typedef os::windows::com_ptr<IWICBitmapEncoder>      wic_encoder;
-    typedef os::windows::com_ptr<IWICBitmapFrameDecode>  wic_frame_decode;
-    typedef os::windows::com_ptr<IWICBitmapFrameEncode>  wic_frame_encode;
-    typedef os::windows::com_ptr<IWICBitmapSource>       wic_bitmap_source;
-    typedef os::windows::com_ptr<IWICComponentInfo>      wic_component_info;
-    typedef os::windows::com_ptr<IWICPixelFormatInfo>    wic_pixel_format_info;
+    typedef os::windows::com_ptr<IWICImagingFactory>        wic_imaging_factory;
+    typedef os::windows::com_ptr<IWICStream>                wic_stream;
+    typedef os::windows::com_ptr<IWICBitmapDecoder>         wic_decoder;
+    typedef os::windows::com_ptr<IWICBitmapEncoder>         wic_encoder;
+    typedef os::windows::com_ptr<IWICBitmapFrameDecode>     wic_frame_decode;
+    typedef os::windows::com_ptr<IWICBitmapFrameEncode>     wic_frame_encode;
+    typedef os::windows::com_ptr<IWICBitmapSource>          wic_bitmap_source;
+    typedef os::windows::com_ptr<IWICComponentInfo>         wic_component_info;
+    typedef os::windows::com_ptr<IWICPixelFormatInfo>       wic_pixel_format_info;
+    typedef os::windows::com_ptr<IWICMetadataQueryReader>   wic_metadata_query_reader;
 
     typedef os::windows::com_ptr<IPropertyBag2>          property_bag2;
 
@@ -83,6 +84,16 @@ namespace imaging
         throw_if_failed<com_exception>(decoder->GetFrame(0, &frame));
 
         return frame;
+    }
+
+    inline wic_metadata_query_reader create_metadata_query_reader(wic_frame_decode frame)
+    {
+        using namespace os::windows;
+        wic_metadata_query_reader reader;
+
+        throw_if_failed<com_exception>(frame->GetMetadataQueryReader(&reader));
+
+        return reader;
     }
 
     inline wic_frame_encode create_encode_frame(wic_encoder encoder)

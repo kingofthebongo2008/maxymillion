@@ -1,17 +1,7 @@
-cbuffer transform_info : register(b0)
-{
-    float m_center_x;
-    float m_center_y;
-
-    float m_image_width;
-    float m_image_height;
-};
-
 struct vs_samples_output
 {
     float4 m_position : SV_Position;
     float2 m_uv0      : texcoord0;
-    float2 m_uv1      : texcoord1;
 };
 
 //get full screen triangle that works better than full screen quad, due to better rasterization utilization
@@ -72,7 +62,6 @@ vs_samples_output main( in uint vertex_id: SV_VertexID)
     vs_samples_output r;
     r.m_position = triangle_screen_space(vertex_id);
     r.m_uv0 = triangle_uv(vertex_id);
-    r.m_uv1 = r.m_uv0;
 
     return r;
 }

@@ -61,13 +61,13 @@ namespace composer
             d3d11::ishaderresourceview_ptr      m_texture_srv;
         };
 
-        inline std::tuple<texture_resource, rgb> create_texture_resource2(ID3D11Device* d, ID3D11DeviceContext*c, const wchar_t* file_name)
+        inline std::tuple<texture_resource, rgb> create_texture_resource2( ID3D11Device* d, ID3D11DeviceContext*c, const wchar_t* file_name)
         {
             std::wstring url(file_name);
 
-            auto texture0 = imaging::read_texture(url.c_str());
-            auto center = sample_texture_center(texture0);
-            auto gpu_texture = upload_to_gpu(d, c, texture0);
+            auto texture0 = imaging::read_texture2(url.c_str());
+            auto center = sample_texture_center(std::get<0>(texture0));
+            auto gpu_texture = upload_to_gpu(d, c, std::get<0>(texture0));
             return std::make_tuple(texture_resource(d, gpu_texture), center);
         }
 
