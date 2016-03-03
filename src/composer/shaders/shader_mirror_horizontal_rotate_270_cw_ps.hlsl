@@ -1,0 +1,2 @@
+#define ORIENTATION orientation_mirror_horizontal_rotate_270_cw
+#include "shader_rotate_ps.hlsl"

@@ -10,7 +10,7 @@
 #include "shaders/shader_crop_vertical_vs.h"
 #include "shaders/shader_crop_horizontal_vs.h"
 #include "shaders/shader_crop_ps.h"
-#include "shaders/shader_rotate_ps.h"
+#include "shaders/shader_rotate_270_cw_ps.h"
 #include "shaders/shader_rotate_vs.h"
 
 #include <ppl.h>

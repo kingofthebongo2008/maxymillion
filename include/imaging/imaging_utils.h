@@ -19,7 +19,7 @@ namespace imaging
         mirror_horizontal = 2,               // 2 = Mirror horizontal
         rotate_180 = 3,                      // 3 = Rotate 180
         mirror_vertical = 4,                 // 4 = Mirror vertical
-        mirror_horizontal_rotate_270_CW = 5, // 5 = Mirror horizontal and rotate 270 CW
+        mirror_horizontal_rotate_270_cw = 5, // 5 = Mirror horizontal and rotate 270 CW
         rotate_90_cw = 6,                    // 6 = Rotate 90 CW
         miror_horizontal_rotate_90_cw = 7,   // 7 = Mirror horizontal and rotate 90 CW
         rotate_270_cw = 8                    // 8 = Rotate 270 CW

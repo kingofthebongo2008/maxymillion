@@ -236,9 +236,34 @@
     <FxCompile Include="..\src\composer\shaders\shader_rotate_vs.hlsl">
       <ShaderType>Vertex</ShaderType>
     </FxCompile>
+    <FxCompile Include="..\src\composer\shaders\shader_mirror_vertical_ps.hlsl">
+      <ShaderType>Pixel</ShaderType>
+    </FxCompile>
+
+    <FxCompile Include="..\src\composer\shaders\shader_rotate_180_ps.hlsl">
+      <ShaderType>Pixel</ShaderType>
+    </FxCompile>
+
     <FxCompile Include="..\src\composer\shaders\shader_rotate_270_cw_ps.hlsl">
       <ShaderType>Pixel</ShaderType>
     </FxCompile>
+
+    <FxCompile Include="..\src\composer\shaders\shader_rotate_90_cw_ps.hlsl">
+      <ShaderType>Pixel</ShaderType>
+    </FxCompile>
+
+    <FxCompile Include="..\src\composer\shaders\shader_mirror_horizontal.hlsl">
+      <ShaderType>Pixel</ShaderType>
+    </FxCompile>
+
+    <FxCompile Include="..\src\composer\shaders\shader_mirror_horizontal_rotate_270_cw_ps.hlsl">
+      <ShaderType>Pixel</ShaderType>
+    </FxCompile>
+
+    <FxCompile Include="..\src\composer\shaders\shader_mirror_horizontal_rotate_90_cw_ps.hlsl">
+      <ShaderType>Pixel</ShaderType>
+    </FxCompile>
+    
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

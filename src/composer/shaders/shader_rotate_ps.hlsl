@@ -14,7 +14,7 @@ SamplerState	photo_sampler : register(s0);
 #define orientation_mirror_vertical 4                    // 4 = Mirror vertical
 #define orientation_mirror_horizontal_rotate_270_cw 5    // 5 = Mirror horizontal and rotate 270 CW
 #define orientation_rotate_90_cw 6                       // 6 = Rotate 90 CW
-#define orientation_miror_horizontal_rotate_90_cw  7     // 7 = Mirror horizontal and rotate 90 CW
+#define orientation_mirror_horizontal_rotate_90_cw  7     // 7 = Mirror horizontal and rotate 90 CW
 #define orientation_rotate_270_cw 8                      // 8 = Rotate 270 CW
 
 
@@ -70,7 +70,7 @@ float2x2 rotate_90_cw_matrix()
         float2 (1.0f, 0.0f));
 }
 
-float2x2 miror_horizontal_rotate_90_cw_matrix()
+float2x2 mirror_horizontal_rotate_90_cw_matrix()
 {
     return mirror_horizontal_matrix() * rotate_90_cw_matrix();
 }
@@ -85,7 +85,7 @@ float2x2 exif_rotation_matrix(uint orientation)
         case orientation_mirror_vertical: return mirror_vertical_matrix();
         case orientation_mirror_horizontal_rotate_270_cw: return mirror_horizontal_rotate_270_cw_matrix();
         case orientation_rotate_90_cw: return rotate_90_cw_matrix();
-        case orientation_miror_horizontal_rotate_90_cw: return miror_horizontal_rotate_90_cw_matrix();
+        case orientation_mirror_horizontal_rotate_90_cw: return mirror_horizontal_rotate_90_cw_matrix();
         case orientation_rotate_270_cw: return rotate_270_cw_matrix();
     }
 }

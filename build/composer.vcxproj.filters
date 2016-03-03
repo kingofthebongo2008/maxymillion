@@ -171,5 +171,26 @@
     <FxCompile Include="..\src\composer\shaders\shader_rotate_270_cw_ps.hlsl">
       <Filter>source Files\shaders</Filter>
     </FxCompile>
+    <FxCompile Include="..\src\composer\shaders\shader_mirror_horizontal.hlsl">
+      <Filter>source Files\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\composer\shaders\shader_mirror_horizontal_rotate_90_cw_ps.hlsl">
+      <Filter>source Files\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\composer\shaders\shader_mirror_horizontal_rotate_270_cw_ps.hlsl">
+      <Filter>source Files\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\composer\shaders\shader_mirror_vertical_ps.hlsl">
+      <Filter>source Files\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\composer\shaders\shader_rotate_90_cw_ps.hlsl">
+      <Filter>source Files\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\composer\shaders\shader_rotate_180_ps.hlsl">
+      <Filter>source Files\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\composer\shaders\shader_rotate_ps.hlsl">
+      <Filter>source Files\shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
