@@ -51,7 +51,7 @@ namespace composer
 
             g.run([this, d]()
             {
-                m_ps_rotate = create_shader_rotate_ps(d);
+                m_ps_rotate = create_shader_rotate_270_cw_ps(d);
             });
 
             g.run([this, d]()
@@ -170,7 +170,7 @@ namespace composer
         shader_crop_horizontal_vs                           m_vs_crop_horizontal;
         shader_crop_ps                                      m_ps_crop;
 
-        shader_rotate_ps                                    m_ps_rotate;
+        shader_rotate_270_cw_ps                             m_ps_rotate;
         shader_rotate_vs                                    m_vs_rotate;
 
     };

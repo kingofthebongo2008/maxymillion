@@ -105,13 +105,6 @@
       <AdditionalLibraryDirectories>../extern/tbb43_20141023oss_vs2013/lib/intel64/vc12;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>dxguid.lib;dxgi.lib;d3d9.lib;d3d11.lib;d2d1.lib;dwrite.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <CudaCompile>
-      <CodeGeneration>compute_30,sm_35</CodeGeneration>
-      <GPUDebugInfo>false</GPUDebugInfo>
-      <CudaRuntime>Shared</CudaRuntime>
-      <TargetMachinePlatform>64</TargetMachinePlatform>
-      <GenerateLineInfo>false</GenerateLineInfo>
-    </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
     <ClCompile>
@@ -132,13 +125,6 @@
       <AdditionalLibraryDirectories>C:\Qt\5.5\msvc2013_64\lib;C:\Qt\5.5\msvc2013_64\mkspecs\win32-msvc2013;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>dxguid.lib;dxgi.lib;d3d9.lib;d3d11.lib;d2d1.lib;dwrite.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <CudaCompile>
-      <CodeGeneration>compute_30,sm_35</CodeGeneration>
-      <GPUDebugInfo>false</GPUDebugInfo>
-      <CudaRuntime>Shared</CudaRuntime>
-      <TargetMachinePlatform>64</TargetMachinePlatform>
-      <GenerateLineInfo>false</GenerateLineInfo>
-    </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'">
     <ClCompile>
@@ -166,14 +152,8 @@
       <AdditionalDependencies>dxguid.lib;dxgi.lib;d3d9.lib;d3d11.lib;d2d1.lib;dwrite.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <StackReserveSize>2097152</StackReserveSize>
     </Link>
-    <CudaCompile>
-      <CodeGeneration>compute_30,sm_35</CodeGeneration>
-      <AdditionalCompilerOptions>
-      </AdditionalCompilerOptions>
-      <TargetMachinePlatform>64</TargetMachinePlatform>
-      <CudaRuntime>Shared</CudaRuntime>
-    </CudaCompile>
   </ItemDefinitionGroup>
+
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
@@ -199,14 +179,16 @@
       <AdditionalDependencies>dxguid.lib;dxgi.lib;d3d9.lib;d3d11.lib;d2d1.lib;dwrite.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <StackReserveSize>2097152</StackReserveSize>
     </Link>
-    <CudaCompile>
-      <CodeGeneration>compute_30,sm_35</CodeGeneration>
-      <AdditionalCompilerOptions>
-      </AdditionalCompilerOptions>
-      <TargetMachinePlatform>64</TargetMachinePlatform>
-      <CudaRuntime>Shared</CudaRuntime>
-    </CudaCompile>
   </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup>
+    <FxCompile>
+      <VariableName>%(Filename)_compiled</VariableName>
+      <HeaderFileOutput>$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
+      <ShaderModel>4.0</ShaderModel>
+    </FxCompile>
+  </ItemDefinitionGroup>  
+
   <ItemGroup>
     <Text Include="readMe.txt" />
   </ItemGroup>
@@ -245,108 +227,43 @@
     <ClInclude Include="..\src\composer\shaders\shader_full_screen.h" />
     <ClInclude Include="..\src\composer\targetver.h" />
   </ItemGroup>
+
   <ItemGroup>
     <ClCompile Include="..\src\composer\main.cpp" />
     <ClCompile Include="..\src\composer\precompiled.cpp" />
   </ItemGroup>
+
   <ItemGroup>
     <FxCompile Include="..\src\composer\shaders\shader_crop_ps.hlsl">
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='release|Win32'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='release|x64'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='release|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='debug|x64'">Pixel</ShaderType>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='release|Win32'">%(Filename)_compiled</VariableName>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">%(Filename)_compiled</VariableName>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='release|x64'">%(Filename)_compiled</VariableName>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='debug|x64'">%(Filename)_compiled</VariableName>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='release|Win32'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='release|x64'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='debug|x64'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
+      <ShaderType>Pixel</ShaderType>
     </FxCompile>
+
     <FxCompile Include="..\src\composer\shaders\shader_crop_horizontal_vs.hlsl">
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='release|Win32'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='release|x64'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='release|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='debug|x64'">Vertex</ShaderType>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='release|Win32'">%(Filename)_compiled</VariableName>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">%(Filename)_compiled</VariableName>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='release|x64'">%(Filename)_compiled</VariableName>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='debug|x64'">%(Filename)_compiled</VariableName>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='release|Win32'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='release|x64'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='debug|x64'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
+      <ShaderType>Vertex</ShaderType>
     </FxCompile>
+
     <FxCompile Include="..\src\composer\shaders\shader_crop_vertical_vs.hlsl">
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='release|Win32'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='release|x64'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='release|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='debug|x64'">Vertex</ShaderType>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='release|Win32'">%(Filename)_compiled</VariableName>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">%(Filename)_compiled</VariableName>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='release|x64'">%(Filename)_compiled</VariableName>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='debug|x64'">%(Filename)_compiled</VariableName>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='release|Win32'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='release|x64'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='debug|x64'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
+      <ShaderType>Vertex</ShaderType>
     </FxCompile>
+
     <FxCompile Include="..\src\composer\shaders\shader_crop_vs.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild>true</ExcludedFromBuild>
     </FxCompile>
+
     <FxCompile Include="..\src\composer\shaders\shader_rotate_vs.hlsl">
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='release|Win32'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='release|x64'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='release|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='debug|x64'">Vertex</ShaderType>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='release|Win32'">%(Filename)_compiled</VariableName>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">%(Filename)_compiled</VariableName>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='release|x64'">%(Filename)_compiled</VariableName>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='debug|x64'">%(Filename)_compiled</VariableName>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='release|Win32'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='release|x64'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='debug|x64'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
+      <ShaderType>Vertex</ShaderType>
     </FxCompile>
+
     <FxCompile Include="..\src\composer\shaders\shader_rotate_ps.hlsl">
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='release|Win32'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='release|x64'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='release|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='debug|x64'">Pixel</ShaderType>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='release|Win32'">%(Filename)_compiled</VariableName>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">%(Filename)_compiled</VariableName>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='release|x64'">%(Filename)_compiled</VariableName>
-      <VariableName Condition="'$(Configuration)|$(Platform)'=='debug|x64'">%(Filename)_compiled</VariableName>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='release|Win32'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='release|x64'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='debug|x64'">$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </FxCompile>
+
+    <FxCompile Include="..\src\composer\shaders\shader_rotate_270_cw_ps.hlsl">
+      <ShaderType>Pixel</ShaderType>
     </FxCompile>
   </ItemGroup>
+
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
+
 </Project>

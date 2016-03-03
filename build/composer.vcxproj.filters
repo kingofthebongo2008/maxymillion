@@ -165,10 +165,10 @@
     <FxCompile Include="..\src\composer\shaders\shader_crop_vs.hlsl">
       <Filter>source Files\shaders</Filter>
     </FxCompile>
-    <FxCompile Include="..\src\composer\shaders\shader_rotate_ps.hlsl">
+    <FxCompile Include="..\src\composer\shaders\shader_rotate_vs.hlsl">
       <Filter>source Files\shaders</Filter>
     </FxCompile>
-    <FxCompile Include="..\src\composer\shaders\shader_rotate_vs.hlsl">
+    <FxCompile Include="..\src\composer\shaders\shader_rotate_270_cw_ps.hlsl">
       <Filter>source Files\shaders</Filter>
     </FxCompile>
   </ItemGroup>

@@ -90,17 +90,22 @@ float2x2 exif_rotation_matrix(uint orientation)
     }
 }
 
+//gets texture coordinates in [0;1] and transforms them with a 2d matrix transform
+float2 exif_transform( float2 xy, uint orientation )
+{
+    float2 h = float2(0.5f, 0.5f);
+    float2 uv = xy - h;
+    float2 uv2 = mul(uv, exif_rotation_matrix(orientation));
+    float2 uv3 = uv2 + h;
+
+    return uv3;
+}
+
 float4 main(in vs_samples_output i) : sv_target0
 {
-    
-    float2 h   = float2(0.5f, 0.5f);
-    float2 uv  = i.m_uv0 - h;
-    float2 uv2 = mul(uv, exif_rotation_matrix( orientation_rotate_270_cw ) );
-    float2 uv3 = uv2 + h;
-    
-    //float2 uv3 = float2 (1.0f - i.m_uv0.y, i.m_uv0.x);
+    float2 uv3 = exif_transform( i.m_uv0, ORIENTATION );
 
-    float3 f0 = photo_model.Sample(photo_sampler, uv3).xyz;
+    float3 f0  = photo_model.Sample(photo_sampler, uv3).xyz;
     return float4( f0, 1.0f);
 }
 
