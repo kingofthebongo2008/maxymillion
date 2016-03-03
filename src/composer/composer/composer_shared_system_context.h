@@ -10,8 +10,16 @@
 #include "shaders/shader_crop_vertical_vs.h"
 #include "shaders/shader_crop_horizontal_vs.h"
 #include "shaders/shader_crop_ps.h"
-#include "shaders/shader_rotate_270_cw_ps.h"
 #include "shaders/shader_rotate_vs.h"
+
+#include "shaders/shader_mirror_horizontal_ps.h"
+#include "shaders/shader_mirror_vertical_ps.h"
+#include "shaders/shader_mirror_horizontal_rotate_90_cw_ps.h"
+#include "shaders/shader_mirror_horizontal_rotate_270_cw_ps.h"
+
+#include "shaders/shader_rotate_270_cw_ps.h"
+#include "shaders/shader_rotate_90_cw_ps.h"
+#include "shaders/shader_rotate_180_ps.h"
 
 #include <ppl.h>
 
@@ -51,7 +59,37 @@ namespace composer
 
             g.run([this, d]()
             {
-                m_ps_rotate = create_shader_rotate_270_cw_ps(d);
+                m_ps_rotate_270_cw = create_shader_rotate_270_cw_ps(d);
+            });
+
+            g.run([this, d]()
+            {
+                m_ps_rotate_90_cw = create_shader_rotate_90_cw_ps(d);
+            });
+
+            g.run([this, d]()
+            {
+                m_ps_rotate_180 = create_shader_rotate_180_ps(d);
+            });
+
+            g.run([this, d]()
+            {
+                m_ps_mirror_horizontal = create_shader_mirror_horizontal_ps(d);
+            });
+
+            g.run([this, d]()
+            {
+                m_ps_mirror_vertical = create_shader_mirror_vertical_ps(d);
+            });
+
+            g.run([this, d]()
+            {
+                m_ps_mirror_horizontal_rotate_270_cw_ps = create_shader_mirror_horizontal_rotate_270_cw_ps(d);
+            });
+
+            g.run([this, d]()
+            {
+                m_ps_mirror_horizontal_rotate_90_cw_ps = create_shader_mirror_horizontal_rotate_90_cw_ps(d);
             });
 
             g.run([this, d]()
@@ -63,7 +101,6 @@ namespace composer
             {
                 m_blend_state = gx::create_opaque_blend_state(d);
             });
-
 
             g.run([this, d]()
             {
@@ -118,7 +155,55 @@ namespace composer
         
         ID3D11PixelShader* get_rotate_shader_ps() const
         {
-            return m_ps_rotate;
+            return m_ps_rotate_270_cw;
+        }
+
+        ID3D11PixelShader* get_transform_shader_ps(imaging::orientation o) const
+        {
+            switch (o)
+            {
+                case imaging::orientation::horizontal:
+                {
+                    return this->m_ps_mirror_horizontal_rotate_90_cw_ps;
+                }
+
+                case imaging::orientation::miror_horizontal_rotate_90_cw:
+                {
+                    return this->m_ps_mirror_horizontal_rotate_90_cw_ps;
+                }
+
+                case imaging::orientation::mirror_horizontal:
+                {
+                    return this->m_ps_mirror_horizontal;
+                }
+
+                case imaging::orientation::mirror_horizontal_rotate_270_cw:
+                {
+                    return this->m_ps_mirror_horizontal_rotate_270_cw_ps;
+                }
+
+                case imaging::orientation::mirror_vertical:
+                {
+                    return this->m_ps_mirror_vertical;
+                }
+
+                case imaging::orientation::rotate_180:
+                {
+                    return this->m_ps_rotate_180;
+                }
+
+                case imaging::orientation::rotate_270_cw:
+                {
+                    return this->m_ps_rotate_270_cw;
+                }
+
+                case imaging::orientation::rotate_90_cw:
+                {
+                    return this->m_ps_rotate_90_cw;
+                }
+
+                default: return nullptr;
+            }
         }
 
         operator ID3D11BlendState*()  const
@@ -170,8 +255,16 @@ namespace composer
         shader_crop_horizontal_vs                           m_vs_crop_horizontal;
         shader_crop_ps                                      m_ps_crop;
 
-        shader_rotate_270_cw_ps                             m_ps_rotate;
         shader_rotate_vs                                    m_vs_rotate;
 
+        shader_rotate_270_cw_ps                             m_ps_rotate_270_cw;
+        shader_rotate_90_cw_ps                              m_ps_rotate_90_cw;
+        shader_rotate_180_ps                                m_ps_rotate_180;
+
+        shader_mirror_horizontal_ps                         m_ps_mirror_horizontal;
+        shader_mirror_vertical_ps                           m_ps_mirror_vertical;
+
+        shader_mirror_horizontal_rotate_270_cw_ps           m_ps_mirror_horizontal_rotate_270_cw_ps;
+        shader_mirror_horizontal_rotate_90_cw_ps            m_ps_mirror_horizontal_rotate_90_cw_ps;
     };
 }

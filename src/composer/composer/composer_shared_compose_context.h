@@ -209,6 +209,114 @@ namespace composer
             return m_system->execute_command_list<r, f>(list, f1);
         }
 
+        private:
+
+        std::tuple<uint32_t, uint32_t > get_size(uint32_t width, uint32_t height, imaging::orientation o)
+        {
+            switch (o)
+            {
+                case imaging::orientation::horizontal  :
+                {
+                    return std::make_tuple(width, height);
+                }
+
+                case imaging::orientation::miror_horizontal_rotate_90_cw:
+                {
+                    return std::make_tuple(height, width);
+                }
+
+                case imaging::orientation::mirror_horizontal:
+                {
+                    return std::make_tuple(width, height);
+                }
+
+                case imaging::orientation::mirror_horizontal_rotate_270_cw:
+                {
+                    return std::make_tuple(height, width);
+                }
+
+                case imaging::orientation::mirror_vertical:
+                {
+                    return std::make_tuple(width, height);
+                }
+
+                case imaging::orientation::rotate_180:
+                {
+                    return std::make_tuple(height, width);
+                }
+
+                case imaging::orientation::rotate_270_cw:
+                {
+                    return std::make_tuple(height, width);
+                }
+
+                case imaging::orientation::rotate_90_cw:
+                {
+                    return std::make_tuple(height, width);
+                }
+
+                default:
+                {
+                    return std::make_tuple(width, height);
+                }
+            }
+        }
+
+        public:
+
+        d3d11::itexture2d_ptr transform_image( gpu::texture_resource&& image, ID3D11DeviceContext* device_context, imaging::orientation o)
+        {
+            auto d      = static_cast<ID3D11Device*>(*this);
+            auto desc   = image.get_desc();
+            auto size   = get_size(desc.Width, desc.Height, o);
+            auto width  = std::get<0>(size);
+            auto height = std::get<1>(size);
+
+            auto resource = gx::create_render_target_resource(d, width, height, desc.Format);
+
+            d3d11::vs_set_shader(device_context, m_system->get_rotate_shader_vs());
+            d3d11::ps_set_shader(device_context, m_system->get_transform_shader_ps( o ) );
+
+            d3d11::gs_set_shader(device_context, nullptr);
+            d3d11::ds_set_shader(device_context, nullptr);
+            d3d11::hs_set_shader(device_context, nullptr);
+
+            //set render target as the back buffer, goes to the operating system
+            d3d11::om_set_render_target(device_context, resource);
+
+            D3D11_VIEWPORT v = {};
+
+            v.Height = static_cast<float>(height);
+            v.Width = static_cast<float>(width);
+
+            v.MinDepth = 0.0f;
+            v.MaxDepth = 1.0f;
+
+            //set a view port for rendering
+            device_context->RSSetViewports(1, &v);
+
+            //clear the back buffer
+            const float fraction = 0.0f;
+            d3d11::clear_render_target_view(device_context, resource, math::set(0, 0, fraction, 1.0f));
+
+            d3d11::om_set_depth_state(device_context, *this);
+            d3d11::rs_set_state(device_context, *this);
+            d3d11::om_set_blend_state(device_context, *this);
+
+            d3d11::ia_set_index_buffer(device_context, nullptr);
+            d3d11::ia_set_vertex_buffer(device_context, nullptr, 0);
+            d3d11::ia_set_input_layout(device_context, nullptr);
+            d3d11::ia_set_primitive_topology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+            d3d11::ps_set_sampler_state(device_context, *this);
+
+            d3d11::ps_set_shader_resource(device_context, image);
+
+            device_context->Draw(3, 0);
+
+            return resource.m_resource;
+        }
+
         //shared
     private:
 

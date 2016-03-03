@@ -13,7 +13,7 @@ namespace composer
 
     namespace details
     {
-        inline pixel_shader_create_info   create_shader_rotate_270_cw_ps(ID3D11Device* device)
+        inline pixel_shader_create_info   create_shader_rotate_90_cw_ps(ID3D11Device* device)
         {
             using namespace d3d11;
             d3d11::ipixelshader_ptr   shader;
@@ -22,25 +22,25 @@ namespace composer
 
             //strange? see in the hlsl file
             static
-            #include "shader_rotate_270_cw_ps_compiled.hlsl"
+            #include "shader_rotate_90_cw_ps_compiled.hlsl"
 
                 //load, compile and create a pixel shader with the code in the hlsl file, might get slow (this is a compilation), consider offloading to another thread
-            throw_if_failed<create_pixel_shader>(device->CreatePixelShader(shader_rotate_270_cw_ps_compiled, sizeof(shader_rotate_270_cw_ps_compiled), nullptr, &shader));
+            throw_if_failed<create_pixel_shader>(device->CreatePixelShader(shader_rotate_90_cw_ps_compiled, sizeof(shader_rotate_90_cw_ps_compiled), nullptr, &shader));
 
-            return std::make_tuple(shader, &shader_rotate_270_cw_ps_compiled[0], static_cast<uint32_t> (sizeof(shader_rotate_270_cw_ps_compiled)));
+            return std::make_tuple(shader, &shader_rotate_90_cw_ps_compiled[0], static_cast<uint32_t> (sizeof(shader_rotate_90_cw_ps_compiled)));
         }
     }
 
-    class shader_rotate_270_cw_ps final
+    class shader_rotate_90_cw_ps final
     {
 
     public:
-        shader_rotate_270_cw_ps()
+        shader_rotate_90_cw_ps()
         {
 
         }
 
-        explicit shader_rotate_270_cw_ps(pixel_shader_create_info info) :
+        explicit shader_rotate_90_cw_ps(pixel_shader_create_info info) :
             m_shader(std::get<0>(info))
             , m_code(std::get<1>(info))
             , m_code_size(std::get<2>(info))
@@ -58,9 +58,9 @@ namespace composer
     };
 
 
-    inline shader_rotate_270_cw_ps   create_shader_rotate_270_cw_ps(ID3D11Device* device)
+    inline shader_rotate_90_cw_ps   create_shader_rotate_90_cw_ps(ID3D11Device* device)
     {
-        return shader_rotate_270_cw_ps(details::create_shader_rotate_270_cw_ps(device));
+        return shader_rotate_90_cw_ps(details::create_shader_rotate_90_cw_ps(device));
     }
 
 }

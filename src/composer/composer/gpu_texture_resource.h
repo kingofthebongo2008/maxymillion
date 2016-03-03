@@ -65,9 +65,9 @@ namespace composer
         {
             std::wstring url(file_name);
 
-            auto texture0 = imaging::read_texture2(url.c_str());
-            auto center = sample_texture_center(std::get<0>(texture0));
-            auto gpu_texture = upload_to_gpu(d, c, std::get<0>(texture0));
+            auto texture0 = imaging::read_texture(url.c_str());
+            auto center = sample_texture_center(texture0);
+            auto gpu_texture = upload_to_gpu(d, c, texture0);
             return std::make_tuple(texture_resource(d, gpu_texture), center);
         }
 
@@ -79,6 +79,5 @@ namespace composer
             auto gpu_texture = upload_to_gpu(d, c, texture0);
             return texture_resource(d, gpu_texture);
         }
-        
     }
 }
