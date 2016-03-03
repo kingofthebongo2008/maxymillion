@@ -91,7 +91,7 @@ namespace Composer
             {
                 auto in_texture  = in[i];
                 auto out_texture = out[i];
-                convert_texture(shared, in_texture, out_texture);
+                composer::convert_texture(shared, in_texture, out_texture);
             });
             
         }

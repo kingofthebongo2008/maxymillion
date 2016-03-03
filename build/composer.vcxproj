@@ -210,6 +210,7 @@
     <ClInclude Include="..\include\util\util_utf8_conv.h" />
     <ClInclude Include="..\src\composer\composer\composer.h" />
     <ClInclude Include="..\src\composer\composer\composer_compose_context.h" />
+    <ClInclude Include="..\src\composer\composer\composer_convert_texture.h" />
     <ClInclude Include="..\src\composer\composer\composer_shared_compose_context.h" />
     <ClInclude Include="..\src\composer\composer\composer_shared_system_context.h" />
     <ClInclude Include="..\src\composer\composer\gpu_constant_buffer.h" />

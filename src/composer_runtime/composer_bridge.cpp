@@ -59,45 +59,6 @@ namespace composer
         return result_set;
     }
 
-    static void convert_texture(std::shared_ptr<composer::shared_compose_context>& shared, const std::wstring& in, const std::wstring& out)
-    {
-        auto dc = d3d11::create_defered_context(*shared);
-        auto t = composer::gpu::create_texture_resource(*shared, dc, in.c_str());
-
-        uint32_t size[2] = { 2284, 1632 };
-        uint32_t width;
-        uint32_t height;
-
-        if (t.width() > t.height())
-        {
-            width = size[0];
-            height = size[1];
-        }
-        else
-        {
-            width = size[1];
-            height = size[0];
-        }
-
-        auto ctx = std::make_shared< composer::compose_context>(shared, width, height);
-
-        {
-            auto t0 = ctx->compose_image(t, dc);
-
-            d3d11::icommandlist_ptr list = d3d11::finish_command_list(dc);
-            ID3D11DeviceContext* immediate_context = static_cast<ID3D11DeviceContext*> (*ctx);
-
-            auto r = shared->execute_command_list< imaging::cpu_texture>(list, [immediate_context, &t0]
-            {
-                return composer::gpu::copy_texture_to_cpu(immediate_context, t0);
-            }
-            );
-
-            std::wstring w(out);
-            imaging::write_texture(r, w.c_str());
-        }
-    }
-
     uint32_t create_shared_compose_context()
     {
         sys::profile_timer  timer;
