@@ -153,7 +153,6 @@
       <StackReserveSize>2097152</StackReserveSize>
     </Link>
   </ItemDefinitionGroup>
-
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
@@ -180,15 +179,13 @@
       <StackReserveSize>2097152</StackReserveSize>
     </Link>
   </ItemDefinitionGroup>
-
   <ItemDefinitionGroup>
     <FxCompile>
       <VariableName>%(Filename)_compiled</VariableName>
       <HeaderFileOutput>$(IntDir)shaders\%(Filename)_compiled%(Extension)</HeaderFileOutput>
       <ShaderModel>4.0</ShaderModel>
     </FxCompile>
-  </ItemDefinitionGroup>  
-
+  </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="readMe.txt" />
   </ItemGroup>
@@ -221,74 +218,64 @@
     <ClInclude Include="..\src\composer\composer\shaders\shader_crop_horizontal_vs.h" />
     <ClInclude Include="..\src\composer\composer\shaders\shader_crop_ps.h" />
     <ClInclude Include="..\src\composer\composer\shaders\shader_crop_vertical_vs.h" />
+    <ClInclude Include="..\src\composer\composer\shaders\shader_mirror_horizontal_ps.h" />
+    <ClInclude Include="..\src\composer\composer\shaders\shader_mirror_horizontal_rotate_270_cw_ps.h" />
+    <ClInclude Include="..\src\composer\composer\shaders\shader_mirror_horizontal_rotate_90_cw_ps.h" />
+    <ClInclude Include="..\src\composer\composer\shaders\shader_mirror_vertical_ps.h" />
+    <ClInclude Include="..\src\composer\composer\shaders\shader_rotate_180_ps.h" />
+    <ClInclude Include="..\src\composer\composer\shaders\shader_rotate_270_cw_ps.h" />
+    <ClInclude Include="..\src\composer\composer\shaders\shader_rotate_90_cw_ps.h" />
     <ClInclude Include="..\src\composer\composer\shaders\shader_rotate_ps.h" />
     <ClInclude Include="..\src\composer\composer\shaders\shader_rotate_vs.h" />
     <ClInclude Include="..\src\composer\precompiled.h" />
     <ClInclude Include="..\src\composer\shaders\shader_full_screen.h" />
     <ClInclude Include="..\src\composer\targetver.h" />
   </ItemGroup>
-
   <ItemGroup>
     <ClCompile Include="..\src\composer\main.cpp" />
     <ClCompile Include="..\src\composer\precompiled.cpp" />
   </ItemGroup>
-
   <ItemGroup>
     <FxCompile Include="..\src\composer\shaders\shader_crop_ps.hlsl">
       <ShaderType>Pixel</ShaderType>
     </FxCompile>
-
     <FxCompile Include="..\src\composer\shaders\shader_crop_horizontal_vs.hlsl">
       <ShaderType>Vertex</ShaderType>
     </FxCompile>
-
     <FxCompile Include="..\src\composer\shaders\shader_crop_vertical_vs.hlsl">
       <ShaderType>Vertex</ShaderType>
     </FxCompile>
-
     <FxCompile Include="..\src\composer\shaders\shader_crop_vs.hlsl">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </FxCompile>
-
     <FxCompile Include="..\src\composer\shaders\shader_rotate_vs.hlsl">
       <ShaderType>Vertex</ShaderType>
     </FxCompile>
-
     <FxCompile Include="..\src\composer\shaders\shader_rotate_ps.hlsl">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </FxCompile>
-
     <FxCompile Include="..\src\composer\shaders\shader_mirror_vertical_ps.hlsl">
       <ShaderType>Pixel</ShaderType>
     </FxCompile>
-
     <FxCompile Include="..\src\composer\shaders\shader_rotate_180_ps.hlsl">
       <ShaderType>Pixel</ShaderType>
     </FxCompile>
-
     <FxCompile Include="..\src\composer\shaders\shader_rotate_270_cw_ps.hlsl">
       <ShaderType>Pixel</ShaderType>
     </FxCompile>
-
     <FxCompile Include="..\src\composer\shaders\shader_rotate_90_cw_ps.hlsl">
       <ShaderType>Pixel</ShaderType>
     </FxCompile>
-
     <FxCompile Include="..\src\composer\shaders\shader_mirror_horizontal.hlsl">
       <ShaderType>Pixel</ShaderType>
     </FxCompile>
-
     <FxCompile Include="..\src\composer\shaders\shader_mirror_horizontal_rotate_270_cw_ps.hlsl">
       <ShaderType>Pixel</ShaderType>
     </FxCompile>
-
     <FxCompile Include="..\src\composer\shaders\shader_mirror_horizontal_rotate_90_cw_ps.hlsl">
       <ShaderType>Pixel</ShaderType>
-    </FxCompile>    
-
+    </FxCompile>
   </ItemGroup>
-
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
-
 </Project>

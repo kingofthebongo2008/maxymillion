@@ -143,6 +143,27 @@
     <ClInclude Include="..\src\composer\composer\gpu_constant_buffer.h">
       <Filter>source Files\src\composer</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_mirror_horizontal_ps.h">
+      <Filter>source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_mirror_horizontal_rotate_90_cw_ps.h">
+      <Filter>source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_mirror_horizontal_rotate_270_cw_ps.h">
+      <Filter>source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_mirror_vertical_ps.h">
+      <Filter>source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_rotate_90_cw_ps.h">
+      <Filter>source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_rotate_180_ps.h">
+      <Filter>source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_rotate_270_cw_ps.h">
+      <Filter>source Files\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\composer\main.cpp">

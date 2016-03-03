@@ -48,6 +48,39 @@
     <ClInclude Include="..\src\composer\shaders\shader_full_screen.h">
       <Filter>Source Files\shaders</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_crop_horizontal_vs.h">
+      <Filter>Source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_crop_ps.h">
+      <Filter>Source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_crop_vertical_vs.h">
+      <Filter>Source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_mirror_horizontal_ps.h">
+      <Filter>Source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_mirror_horizontal_rotate_90_cw_ps.h">
+      <Filter>Source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_mirror_horizontal_rotate_270_cw_ps.h">
+      <Filter>Source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_mirror_vertical_ps.h">
+      <Filter>Source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_rotate_90_cw_ps.h">
+      <Filter>Source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_rotate_180_ps.h">
+      <Filter>Source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_rotate_270_cw_ps.h">
+      <Filter>Source Files\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_rotate_vs.h">
+      <Filter>Source Files\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\composer_runtime\composer_runtime.cpp">
