@@ -219,6 +219,7 @@
     <ClInclude Include="..\src\composer\composer\shaders\shader_crop_horizontal_vs.h" />
     <ClInclude Include="..\src\composer\composer\shaders\shader_crop_ps.h" />
     <ClInclude Include="..\src\composer\composer\shaders\shader_crop_vertical_vs.h" />
+    <ClInclude Include="..\src\composer\composer\shaders\shader_horizontal_ps.h" />
     <ClInclude Include="..\src\composer\composer\shaders\shader_mirror_horizontal_ps.h" />
     <ClInclude Include="..\src\composer\composer\shaders\shader_mirror_horizontal_rotate_270_cw_ps.h" />
     <ClInclude Include="..\src\composer\composer\shaders\shader_mirror_horizontal_rotate_90_cw_ps.h" />
@@ -274,6 +275,9 @@
       <ShaderType>Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="..\src\composer\shaders\shader_mirror_horizontal_rotate_90_cw_ps.hlsl">
+      <ShaderType>Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\src\composer\shaders\shader_horizontal_ps.hlsl">
       <ShaderType>Pixel</ShaderType>
     </FxCompile>
   </ItemGroup>

@@ -12,6 +12,7 @@
 #include "shaders/shader_crop_ps.h"
 #include "shaders/shader_rotate_vs.h"
 
+#include "shaders/shader_horizontal_ps.h"
 #include "shaders/shader_mirror_horizontal_ps.h"
 #include "shaders/shader_mirror_vertical_ps.h"
 #include "shaders/shader_mirror_horizontal_rotate_90_cw_ps.h"
@@ -70,6 +71,11 @@ namespace composer
             g.run([this, d]()
             {
                 m_ps_rotate_180 = create_shader_rotate_180_ps(d);
+            });
+
+            g.run([this, d]()
+            {
+                m_ps_horizontal = create_shader_horizontal_ps(d);
             });
 
             g.run([this, d]()
@@ -164,7 +170,7 @@ namespace composer
             {
                 case imaging::orientation::horizontal:
                 {
-                    return this->m_ps_mirror_horizontal_rotate_90_cw_ps;
+                    return this->m_ps_horizontal;
                 }
 
                 case imaging::orientation::miror_horizontal_rotate_90_cw:
@@ -261,6 +267,7 @@ namespace composer
         shader_rotate_90_cw_ps                              m_ps_rotate_90_cw;
         shader_rotate_180_ps                                m_ps_rotate_180;
 
+        shader_horizontal_ps                                m_ps_horizontal;
         shader_mirror_horizontal_ps                         m_ps_mirror_horizontal;
         shader_mirror_vertical_ps                           m_ps_mirror_vertical;
 

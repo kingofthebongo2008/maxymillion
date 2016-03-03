@@ -81,6 +81,9 @@
     <ClInclude Include="..\src\composer\composer\shaders\shader_rotate_vs.h">
       <Filter>Source Files\shaders</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_horizontal_ps.h">
+      <Filter>Source Files\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\composer_runtime\composer_runtime.cpp">
@@ -121,9 +124,6 @@
     <FxCompile Include="..\src\composer\shaders\shader_rotate_vs.hlsl">
       <Filter>Source Files\shaders</Filter>
     </FxCompile>
-    <FxCompile Include="..\src\composer\shaders\shader_mirror_horizontal.hlsl">
-      <Filter>Source Files\shaders</Filter>
-    </FxCompile>
     <FxCompile Include="..\src\composer\shaders\shader_mirror_horizontal_rotate_90_cw_ps.hlsl">
       <Filter>Source Files\shaders</Filter>
     </FxCompile>
@@ -137,6 +137,12 @@
       <Filter>Source Files\shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\composer\shaders\shader_rotate_180_ps.hlsl">
+      <Filter>Source Files\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\composer\shaders\shader_horizontal_ps.hlsl">
+      <Filter>Source Files\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\composer\shaders\shader_mirror_horizontal_ps.hlsl">
       <Filter>Source Files\shaders</Filter>
     </FxCompile>
   </ItemGroup>

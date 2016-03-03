@@ -167,6 +167,9 @@
     <ClInclude Include="..\src\composer\composer\composer_convert_texture.h">
       <Filter>source Files\src\composer</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\composer\composer\shaders\shader_horizontal_ps.h">
+      <Filter>source Files\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\composer\main.cpp">
@@ -214,6 +217,9 @@
       <Filter>source Files\shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\composer\shaders\shader_mirror_horizontal_ps.hlsl">
+      <Filter>source Files\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\composer\shaders\shader_horizontal_ps.hlsl">
       <Filter>source Files\shaders</Filter>
     </FxCompile>
   </ItemGroup>
