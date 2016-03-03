@@ -60,10 +60,30 @@ static std::vector< std::wstring > file_paths2( const std::vector< std::wstring 
     return result_set;
 }
 
+static inline composer::gpu::texture_resource create_texture_resource( const std::shared_ptr<composer::shared_compose_context>& shared , ID3D11DeviceContext*c, const wchar_t* file_name)
+{
+    std::wstring url(file_name);
+    auto d = static_cast<ID3D11Device*>(*shared);
+
+    auto cpu_texture = imaging::read_texture2(url.c_str());
+    auto orientation = std::get<1>(cpu_texture);
+
+    if ( orientation != imaging::orientation::horizontal )
+    {
+        auto gpu_texture = composer::gpu::upload_to_gpu(d, c, std::get<0>(cpu_texture));
+        return composer::gpu::texture_resource( d, shared->transform_image( composer::gpu::texture_resource( d, gpu_texture ), c, orientation));
+    }
+    else
+    {
+        auto gpu_texture = composer::gpu::upload_to_gpu(d, c, std::get<0>(cpu_texture));
+        return composer::gpu::texture_resource(d, gpu_texture);
+    }
+}
+
 static void convert_texture( std::shared_ptr<composer::shared_compose_context>& shared, const std::wstring& in, const std::wstring& out)
 {
     auto dc = d3d11::create_defered_context(*shared);
-    auto t = composer::gpu::create_texture_resource( *shared, dc, in.c_str() );
+    auto t = create_texture_resource( shared, dc, in.c_str() );
 
     uint32_t size[2] = { 2284, 1632 };
     uint32_t width;
@@ -106,15 +126,19 @@ int32_t main( int32_t , char const* [] )
     com_initializer     com;
 
     fs::media_source base(L"./media/");
-    fs::media_source source_in(L"./media/in/");
+    fs::media_source source_in(L"./media/in2/");
     fs::media_source source_out(L"./media/out/");
 
     auto p = file_paths(source_in.get_path());
     auto p2 = file_paths2(p, source_out.get_path());
 
     //read a texture
-    auto url1 = fs::build_media_url(base, L"model/Adele & Anthony VERT1.tif");
-    auto url2 = fs::build_media_url(base, L"model/Adele & Anthony1.tif");
+    auto url1 = fs::build_media_url(base, L"model/Adele & Anthony.tif");
+    auto url2 = fs::build_media_url(base, L"model/Adele & Anthony VERT.tif");
+    auto url3 = fs::build_media_url(base, L"in/001JD31JAn16.JPG"); 
+    auto url4 = fs::build_media_url(base, L"in2/DSC_1362.JPG");
+
+    auto r = imaging::read_texture2(url4.get_path());
 
     //read the png texture
 
@@ -129,8 +153,8 @@ int32_t main( int32_t , char const* [] )
 
     std::cout << "Initialization " << timer.milliseconds() << " ms" << std::endl;
     timer.reset();
-
-    concurrency::parallel_for( 0U, static_cast<uint32_t>( p.size() ), [&shared, &p, &p2] ( uint32_t i )
+    //p.size();
+    concurrency::parallel_for( 0U, static_cast<uint32_t>( 1 ), [&shared, &p, &p2] ( uint32_t i )
     {
         auto in = p[i];
         auto out = p2[i];
